@@ -1,0 +1,21 @@
+{
+  "name": "swag-labs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test:e2e": "npx playwright test test/",
+    "test:e2e:all": "npx playwright test tests --project=all-browsers-and-tests",
+    "test:e2e:smoke": "npx playwright tests/ --grep @smoke --project ",
+    "test:e2e:non-smoke": "npx playwright tests --grep-invert @smoke --project",
+    "test:e2e:chrome": "npx playwright test tests --project=chromium",
+    "test:e2e:headless": "npx playwright test tests --headed=false"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@playwright/test": "^1.53.1",
+    "@types/node": "^24.0.3"
+  }
+}
