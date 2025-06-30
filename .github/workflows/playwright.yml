@@ -30,8 +30,11 @@ jobs:
   deploy-report:
     needs: test # This job depends on the 'test' job, so it will only run if 'test' completes successfully.
     runs-on: ubuntu-latest
-
     if: success() && github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    permissions:
+      pages: write
+      contents: write
+      id-token: write # Required for GitHub Pages deployment
 
     steps:
       - uses: actions/checkout@v4 # Checkout the repository again for the deploy job
