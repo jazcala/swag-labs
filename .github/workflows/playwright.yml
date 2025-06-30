@@ -1,27 +1,48 @@
 name: Playwright Tests
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
 jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: lts/*
-    - name: Install dependencies
-      run: npm ci
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
-    - name: Run Playwright tests
-      run: npx playwright test
-    - uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() }}
-      with:
-        name: playwright-report
-        path: playwright-report/
-        retention-days: 30
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      - name: Run Playwright tests
+        run: npx playwright test
+      - name: Upload Playwright report artifact # Uploads the report folder as an artifact
+        uses: actions/upload-artifact@v4
+        if: always() # Always upload the report, even if tests fail
+        with:
+          name: playwright-report # Name of the artifact
+          path: playwright-report/ # Path to your generated report folder
+          retention-days: 30 # How long to retain the artifact
+
+  deploy-report:
+    needs: test # This job depends on the 'test' job, so it will only run if 'test' completes successfully.
+    runs-on: ubuntu-latest
+
+    if: success() && github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+
+    steps:
+      - uses: actions/checkout@v4 # Checkout the repository again for the deploy job
+      - name: Download Playwright report artifact # Download the report from the 'test' job
+        uses: actions/download-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }} # Default token provided by GitHub Actions
+          publish_dir: playwright-report
