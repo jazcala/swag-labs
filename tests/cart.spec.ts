@@ -33,7 +33,6 @@ test.describe("Cart Page Tests", () => {
     const cartPage = new CartPage(page);
     const cartCount = await cartPage.cartQuantity.textContent();
     expect(cartCount).toBe('1');
-
   });
 
   test("should remove item from the cart", async ({ page }) => {
@@ -48,7 +47,7 @@ test.describe("Cart Page Tests", () => {
     await expect(cartPage.cartQuantity).not.toBeVisible();
   });
 
-  test("should proceed to checkout", async ({ page }) => {
+  test("should proceed to checkout after clicking the button", async ({ page }) => {
     const productPage = new ProductsPage(page);
     await productPage.addFirstProductToCart();
     await productPage.cartButton.click();
