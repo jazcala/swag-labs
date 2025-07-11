@@ -2,7 +2,7 @@ import { Page } from "@playwright/test";
 import { LoginPage } from "../pages/LoginPage";
 import { USERS, generateRandomUser } from "./testData";
 import { ProductsPage } from "../pages/ProductsPage";
-import { CheckoutPage } from "../pages/checkoutPage";
+import { CheckoutPage } from "../pages/CheckoutPage";
 import { CartPage } from "../pages/CartPage";
 
 /**

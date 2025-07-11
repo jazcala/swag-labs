@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { ProductsPage } from "../pages/ProductsPage";
 import { LoginPage } from "../pages/LoginPage";
 import { CartPage } from "../pages/CartPage";
-import { CheckoutPage } from "../pages/checkoutPage";
+import { CheckoutPage } from "../pages/CheckoutPage";
 
 test.describe("Checkout Page Tests", () => {
 
