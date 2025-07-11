@@ -6,6 +6,6 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /tests-examples/
-Readme.md
+README.md
 .env
 /tests/example.spec.ts

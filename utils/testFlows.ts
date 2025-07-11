@@ -4,6 +4,7 @@ import { USERS, generateRandomUser } from "./testData";
 import { ProductsPage } from "../pages/ProductsPage";
 import { CheckoutPage } from "../pages/CheckoutPage";
 import { CartPage } from "../pages/CartPage";
+import { CheckoutOverviewPage } from "../pages/CheckoutOverviewPage";
 
 /**
  * Performs a login action for the standard user.
@@ -44,4 +45,9 @@ export async function fillFormAndCheckout(page: Page): Promise<void> {
   const person = generateRandomUser();
   await checkoutPage.fillCheckoutForm(person.firstName, person.lastName, person.zipCode);
   await checkoutPage.continueButton.click();
+}
+
+export async function completeCheckout(page: Page): Promise<void> {
+  const checkoutOverviewPage = new CheckoutOverviewPage(page);
+  await checkoutOverviewPage.finishButton.click();
 }
