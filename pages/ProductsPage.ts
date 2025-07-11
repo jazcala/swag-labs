@@ -38,8 +38,8 @@ export class ProductsPage {
   }
 
   async addToCart(productName: string): Promise<void> {
-    const product = this.products.locator('.inventory_item_name', { hasText: productName });
-    await product.locator('.btn_primary').click();
+    const productButtonItemLocator = productName.toLowerCase().split(' ').join('-');
+    await this.page.locator(`[data-test="add-to-cart-${productButtonItemLocator}"]`).click();
   }
 
   async getAddToCartButton(productName: string): Promise<Locator> {

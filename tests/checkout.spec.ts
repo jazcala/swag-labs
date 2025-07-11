@@ -1,11 +1,10 @@
 import { test, expect } from "@playwright/test";
-import { describe } from "node:test";
 import { ProductsPage } from "../pages/ProductsPage";
 import { LoginPage } from "../pages/LoginPage";
 import { CartPage } from "../pages/CartPage";
 import { CheckoutPage } from "../pages/checkoutPage";
 
-describe("Checkout Tests", () => {
+test.describe("Checkout Page Tests", () => {
 
   test.beforeEach(async ({ page }) => {
     //login to the application
