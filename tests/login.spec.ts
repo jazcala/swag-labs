@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { LoginPage } from "../pages/LoginPage";
+import { productsPageUrl, USERS } from "../utils/testData";
 
 test.describe("Login Tests", () => {
 
@@ -10,39 +11,42 @@ test.describe("Login Tests", () => {
   });
 
   test("should display Swag Labs as the title", async ({ page }) => {
-    await expect(page).toHaveTitle("Swag Labs");
+    const loginPage = new LoginPage(page);
+    await expect(page).toHaveTitle(loginPage.expectedTitle);
   });
 
   test("should have expected text on the login page", async ({ page }) => {
     const loginPage = new LoginPage(page);
     await expect(loginPage.usernameInput).toHaveAttribute(
       "placeholder",
-      "Username"
+      loginPage.expectedUsernamePlaceholder
     );
     //password field placeholder
     await expect(loginPage.passwordInput).toHaveAttribute(
       "placeholder",
-      "Password"
+      loginPage.expectedPasswordPlaceholder
     );
     // login button text
     await expect(loginPage.loginButton).toHaveText(
-      "Login"
+      loginPage.expectedLoginButtonText
     );
   });
 
   test("should display an error if username is missing", async ({ page }) => {
     const loginPage = new LoginPage(page);
-    loginPage.login("", "secret_sauce");
+    const { password } = USERS.STANDARD_USER;
+    loginPage.login("", password);
     await expect(loginPage.errorMessage).toHaveText(
-      "Epic sadface: Username is required"
+      loginPage.expectedErrorMessageUsernameRequired
     );
   });
 
   test("should display an error if password is missing", async ({ page }) => {
     const loginPage = new LoginPage(page);
-    loginPage.login("standard_user", "");
+    const { username } = USERS.STANDARD_USER;
+    loginPage.login(username, "");
     await expect(page.locator(".error-message-container")).toHaveText(
-      "Epic sadface: Password is required"
+      loginPage.expectedErrorMessagePasswordRequired
     );
   });
 
@@ -50,37 +54,40 @@ test.describe("Login Tests", () => {
     const loginPage = new LoginPage(page);
     loginPage.login("", "");
     await expect(page.locator(".error-message-container")).toHaveText(
-      "Epic sadface: Username is required"
+      loginPage.expectedErrorMessageUsernameRequired
     );
   });
 
   test("should login with valid credentials", async ({ page }) => {
     const loginPage = new LoginPage(page);
-    loginPage.login("standard_user", "secret_sauce");
-    await expect(page.locator(".title")).toHaveText("Products");
+    const { username, password } = USERS.STANDARD_USER;
+    await loginPage.login(username, password);
+    await expect(page.url()).toContain(productsPageUrl);
   });
 
   test("should not login with invalid credentials", async ({ page }) => {
     const loginPage = new LoginPage(page);
     loginPage.login("invalid_user", "invalid_password");
-    await expect(page.locator(".error-message-container")).toHaveText(
-      "Epic sadface: Username and password do not match any user in this service"
+    await expect(loginPage.errorMessage).toHaveText(
+      loginPage.expectedErrorMessageInvalidCredentials
     );
   });
 
   test("should display an error for locked out user", async ({ page }) => {
     const loginPage = new LoginPage(page);
-    loginPage.login("locked_out_user", "secret_sauce");
-    await expect(page.locator(".error-message-container")).toHaveText(
-      "Epic sadface: Sorry, this user has been locked out."
+    const { username, password } = USERS.LOCKED_OUT_USER;
+    loginPage.login(username, password);
+    await expect(loginPage.errorMessage).toHaveText(loginPage.expectedErrorMessageLockedOut
     );
   });
+
   // skipping the problem user test as it is not working as expected
   test.skip("should display an error for problem user", async ({ page }) => {
     const loginPage = new LoginPage(page);
-    loginPage.login("problem_user", "secret_sauce");
-    await expect(page.locator(".error-message-container")).toHaveText(
-      "Epic sadface: Sorry, this user has been identified as a problem user."
+    const { username, password } = USERS.PROBLEM_USER;
+    loginPage.login(username, password);
+    await expect(loginPage.errorMessage).toHaveText(
+      loginPage.expectedErrorMessageProblemUser
     );
   });
 });

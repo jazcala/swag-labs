@@ -10,11 +10,14 @@ export class ProductsPage {
   readonly title: Locator;
   readonly products: Locator;
   readonly cartCount: Locator;
-
   readonly sortByPriceDropdown: Locator;
   readonly productPrices: Locator;
-
   readonly cartButton: Locator;
+
+  // Expected texts and attributes can be added here if needed
+  expectedTitle = "Products";
+  expectedLogoText = "Swag Labs";
+  expectedProductsCount = 6;
 
   constructor(page: Page) {
     this.page = page;

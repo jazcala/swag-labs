@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { loginAsStandardUser, addProductByName, viewCart, proceedToCheckout, fillFormAndCheckout } from "../utils/testFlows";
 import { CheckoutOverviewPage } from "../pages/CheckoutOverviewPage";
-import { checkoutCompletePageUrl, productsPageUrl, testProduct, testCheckoutData } from "../utils/testData";
+import { checkoutCompletePageUrl, productsPageUrl, testProduct, testCheckoutData, checkoutOverviewPageUrl } from "../utils/testData";
 
 
 test.describe("Checkout Overview Tests", () => {
@@ -17,7 +17,7 @@ test.describe("Checkout Overview Tests", () => {
     await proceedToCheckout(page);
     // Complete the form and proceed to checkout overview
     await fillFormAndCheckout(page);
-    await expect(page).toHaveURL("/checkout-step-two.html");
+    await expect(page).toHaveURL(checkoutOverviewPageUrl);
   });
 
   test("should display the correct title on checkout overview page", async ({ page }) => {

@@ -15,6 +15,8 @@ export class CartPage {
   readonly cartQuantity: Locator;
   readonly removeButton: Locator;
 
+  readonly expectedTitle = "Your Cart";
+
   constructor(page: Page) {
     this.page = page;
     this.title = page.locator('[data-test="title"]');

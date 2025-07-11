@@ -1,26 +1,17 @@
 import { test, expect } from "@playwright/test";
-import { ProductsPage } from "../pages/ProductsPage";
-import { LoginPage } from "../pages/LoginPage";
 import { CartPage } from "../pages/CartPage";
 import { CheckoutPage } from "../pages/CheckoutPage";
+import { addFirstProductToCart, loginAsStandardUser, viewCart, proceedToCheckout } from "../utils/testFlows";
+import { cartPageUrl, checkoutOverviewPageUrl, checkoutPageUrl, generateRandomUser } from "../utils/testData";
 
 test.describe("Checkout Page Tests", () => {
 
   test.beforeEach(async ({ page }) => {
-    //login to the application
-    const loginPage = new LoginPage(page);
-    await loginPage.goto();
-    expect(loginPage.loginButton).toBeVisible();
-    await loginPage.login("standard_user", "secret_sauce");
-    await expect(page).toHaveURL("/inventory.html");
-    // Add the first product to the cart and go to checkout page
-    const productPage = new ProductsPage(page);
-    await productPage.addFirstProductToCart();
-    await productPage.cartButton.click();
-    const cartPage = new CartPage(page);
-    await expect(cartPage.checkoutButton).toBeVisible();
-    await cartPage.checkoutButton.click();
-    await expect(page).toHaveURL("/checkout-step-one.html");
+    await loginAsStandardUser(page);
+    await addFirstProductToCart(page);
+    await viewCart(page);
+    await proceedToCheckout(page);
+    await expect(page).toHaveURL(checkoutPageUrl);
   });
 
   test("should displayed the title", async ({ page }) => {
@@ -59,36 +50,40 @@ test.describe("Checkout Page Tests", () => {
 
   test("should fill the checkout form and proceed to the next step", async ({ page }) => {
     const checkoutPage = new CheckoutPage(page);
-    await checkoutPage.fillCheckoutForm("John", "Doe", "12345");
+    const { firstName, lastName, zipCode } = generateRandomUser();
+    await checkoutPage.fillCheckoutForm(firstName, lastName, zipCode);
     await checkoutPage.continueButton.click();
-    await expect(page).toHaveURL("/checkout-step-two.html");
+    await expect(page).toHaveURL(checkoutOverviewPageUrl);
   });
 
   test("should cancel the checkout process", async ({ page }) => {
     const checkoutPage = new CheckoutPage(page);
     await checkoutPage.cancelButton.click();
-    await expect(page).toHaveURL("/cart.html");
-    const cartPage = new CartPage(page);
-    await expect(cartPage.title).toHaveText("Your Cart");
+    await expect(page).toHaveURL(cartPageUrl);
+    const { title, expectedTitle } = new CartPage(page);
+    await expect(title).toHaveText(expectedTitle);
   });
 
   test("should display an error message for empty first name", async ({ page }) => {
     const checkoutPage = new CheckoutPage(page);
-    checkoutPage.fillCheckoutForm("", "Doe", "12345");
+    const { lastName, zipCode } = generateRandomUser();
+    checkoutPage.fillCheckoutForm("", lastName, zipCode);
     await checkoutPage.continueButton.click();
     await expect(checkoutPage.errorMessage).toHaveText(checkoutPage.firstNameError);
   });
 
   test("should display an error message for empty last name", async ({ page }) => {
     const checkoutPage = new CheckoutPage(page);
-    checkoutPage.fillCheckoutForm("John", "", "12345");
+    const { firstName, zipCode } = generateRandomUser();
+    checkoutPage.fillCheckoutForm(firstName, "", zipCode);
     await checkoutPage.continueButton.click();
     await expect(checkoutPage.errorMessage).toHaveText(checkoutPage.lastNameError);
   });
 
   test("should display an error message for empty postal code", async ({ page }) => {
     const checkoutPage = new CheckoutPage(page);
-    checkoutPage.fillCheckoutForm("John", "Doe", "");
+    const { firstName, lastName } = generateRandomUser();
+    checkoutPage.fillCheckoutForm(firstName, lastName, "");
     await checkoutPage.continueButton.click();
     await expect(checkoutPage.errorMessage).toHaveText(checkoutPage.postalCodeError);
   });

@@ -11,6 +11,17 @@ export class LoginPage {
   readonly loginButton: Locator;
   readonly errorMessage: Locator;
 
+  // Expected elements values
+  readonly expectedTitle: string = "Swag Labs";
+  readonly expectedUsernamePlaceholder: string = "Username";
+  readonly expectedPasswordPlaceholder: string = "Password";
+  readonly expectedLoginButtonText: string = "Login";
+  readonly expectedErrorMessageUsernameRequired: string = "Epic sadface: Username is required";
+  readonly expectedErrorMessagePasswordRequired: string = "Epic sadface: Password is required";
+  readonly expectedErrorMessageInvalidCredentials: string = "Epic sadface: Username and password do not match any user in this service";
+  readonly expectedErrorMessageLockedOut: string = "Epic sadface: Sorry, this user has been locked out.";
+  readonly expectedErrorMessageProblemUser: string = "Epic sadface: Problem user";
+
   /**
    * Constructor for the LoginPage.
    * @param page The Playwright Page object instance.

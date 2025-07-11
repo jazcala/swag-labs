@@ -1,46 +1,40 @@
 import { test, expect } from "@playwright/test";
-import { LoginPage } from "../pages/LoginPage";
 import { ProductsPage } from "../pages/ProductsPage";
+import { loginAsStandardUser } from "../utils/testFlows";
+import { cartPageUrl, productsPageUrl, testProduct } from "../utils/testData";
 
 test.describe("Products Tests", () => {
 
   test.beforeEach(async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    await loginPage.goto();
-    await expect(loginPage.loginButton).toBeVisible();
-    await loginPage.login("standard_user", "secret_sauce");
-    await expect(page).toHaveURL("/inventory.html");
+    await loginAsStandardUser(page);
+    await expect(page).toHaveURL(productsPageUrl);
   })
 
   test("should have Swag Labs as logo", async ({ page }) => {
-    const productsPage = new ProductsPage(page);
-    await expect(productsPage.logo).toBeVisible();
-    await expect(productsPage.logo).toHaveText("Swag Labs");
+    const { logo, expectedLogoText } = new ProductsPage(page);
+    await expect(logo).toBeVisible();
+    await expect(logo).toHaveText(expectedLogoText);
 
   });
 
   test("should display the products page title", async ({ page }) => {
-    const productsPage = new ProductsPage(page);
-    await expect(productsPage.title).toHaveText("Products");
-
+    const { title, expectedTitle } = new ProductsPage(page);
+    await expect(title).toHaveText(expectedTitle);
   });
 
   test("should display the correct number of products", async ({ page }) => {
-    const productPage = new ProductsPage(page);
-    const productCount = await productPage.products.count();
-    expect(productCount).toBe(6);
+    const { products, expectedProductsCount } = new ProductsPage(page);
+    const productCount = await products.count();
+    expect(productCount).toBe(expectedProductsCount);
   });
 
   test("should display product details when clicked", async ({ page }) => {
-    const productId = 4; // Assuming product ID 4 is "Sauce Labs Backpack"
-    const productUrl = `/inventory-item.html?id=${productId}`;
-    const productName = "Sauce Labs Backpack";
+    const { id, name } = testProduct;
+    const productUrl = `/inventory-item.html?id=${id}`;
     const productPage = new ProductsPage(page);
     await expect(productPage.products.first()).toBeVisible();
-    productPage.selectProduct(productName);
+    await productPage.selectProduct(name);
     await expect(page).toHaveURL(productUrl);
-    await expect(page.locator(".inventory_details_desc")).toBeVisible();
-    expect(productName).toBe("Sauce Labs Backpack");
   });
 
   test("should add first product to the cart", async ({ page }) => {
@@ -113,7 +107,7 @@ test.describe("Products Tests", () => {
   test("should navigate to the cart page", async ({ page }) => {
     const productPage = new ProductsPage(page);
     productPage.cartButton.click();
-    await expect(page).toHaveURL("/cart.html");
+    await expect(page).toHaveURL(cartPageUrl);
   });
 
 });

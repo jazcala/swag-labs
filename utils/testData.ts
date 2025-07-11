@@ -49,7 +49,7 @@ export const checkoutCompletePageUrl: string = '/checkout-complete.html';
 
 // Test data for products
 interface testProduct {
-  id: string;
+  id: number;
   name: string;
   price: string;
   tax: string;
@@ -58,7 +58,7 @@ interface testProduct {
 
 export const testProduct: testProduct =
 {
-  id: 'sauce-labs-backpack', name: 'Sauce Labs Backpack', price: '29.99', tax: '2.40',
+  id: 4, name: 'Sauce Labs Backpack', price: '29.99', tax: '2.40',
   description: 'carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection.'
 };
 

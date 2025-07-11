@@ -1,22 +1,20 @@
 import { test, expect } from "@playwright/test";
 import { ProductsPage } from "../pages/ProductsPage";
-import { LoginPage } from "../pages/LoginPage";
 import { CartPage } from "../pages/CartPage";
+import { loginAsStandardUser, addFirstProductToCart, viewCart } from "../utils/testFlows";
+import { cartPageUrl, checkoutPageUrl } from "../utils/testData";
 
-test.describe("Cart Page Tests", () => {
+test.describe("Cart Page with one product Tests", () => {
 
   test.beforeEach(async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    await loginPage.goto();
-    expect(loginPage.loginButton).toBeVisible();
-    await loginPage.login("standard_user", "secret_sauce");
-    await expect(page).toHaveURL("/inventory.html");
+    await loginAsStandardUser(page);
+    await addFirstProductToCart(page);
+    await viewCart(page);
+    await expect(page).toHaveURL(cartPageUrl);
   })
 
   test("should display the cart page", async ({ page }) => {
     const cartPage = new CartPage(page);
-    await cartPage.goto();
-    await expect(page).toHaveURL("/cart.html");
     await expect(cartPage.title).toHaveText("Your Cart");
     const cartQTY = await cartPage.cartQuantityLabel.textContent();
     expect(cartQTY).toBe("QTY");
@@ -26,19 +24,13 @@ test.describe("Cart Page Tests", () => {
     expect(cartPage.continueShoppingButton).toHaveText("Continue Shopping");
   });
 
-  test("should add item from the cart", async ({ page }) => {
-    const productPage = new ProductsPage(page);
-    await productPage.addFirstProductToCart();
-    await productPage.cartButton.click();
+  test("should have one item in the cart", async ({ page }) => {
     const cartPage = new CartPage(page);
     const cartCount = await cartPage.cartQuantity.textContent();
     expect(cartCount).toBe('1');
   });
 
   test("should remove item from the cart", async ({ page }) => {
-    const productPage = new ProductsPage(page);
-    await productPage.addFirstProductToCart();
-    await productPage.cartButton.click();
     const cartPage = new CartPage(page);
     const cartCount = await cartPage.cartQuantity.textContent();
     expect(cartCount).toBe('1');
@@ -48,13 +40,10 @@ test.describe("Cart Page Tests", () => {
   });
 
   test("should proceed to checkout after clicking the button", async ({ page }) => {
-    const productPage = new ProductsPage(page);
-    await productPage.addFirstProductToCart();
-    await productPage.cartButton.click();
     const cartPage = new CartPage(page);
     await expect(cartPage.checkoutButton).toBeVisible();
     await cartPage.checkoutButton.click();
-    await expect(page).toHaveURL("/checkout-step-one.html");
+    await expect(page).toHaveURL(checkoutPageUrl);
   });
 
 });
