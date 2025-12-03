@@ -2,15 +2,18 @@
 
 ## Overview
 
-This project presents a robust and scalable end-to-end test automation framework built with Playwright and TypeScript, specifically designed for the [Sauce Demo web application](https://www.saucedemo.com/). It serves as a comprehensive portfolio piece, showcasing modern UI test automation principles and my expertise in building maintainable, efficient, and reliable test suites.
+This project presents a robust and scalable end-to-end test automation framework built with **Playwright, TypeScript, and Node.js**. It serves as a comprehensive portfolio piece showcasing expertise in building maintainable, efficient, and reliable test suites.
 
 The framework is engineered to demonstrate:
 
+* **Environmental Consistency & Scalability**: **Integrated with Docker** to package the test environment, guaranteeing **identical and reliable execution** across all developer and Continuous Integration (CI) machines.
 * **Best-in-Class Test Architecture**: Leveraging the Page Object Model (POM) for enhanced maintainability, readability, and reusability of test code.
 * **Robust Locator Strategies**: Utilizing data-test attributes for resilient and stable element identification, minimizing test fragility.
 * **Comprehensive Test Coverage**: Automating critical user flows and edge cases to ensure application quality.
 * **Seamless CI/CD Integration**: Demonstrating automated test execution as part of a Continuous Integration pipeline using GitHub Actions, with test reports published directly to GitHub Pages for easy access and review. [Sauce Demo Report](https://jazcala.github.io/swag-labs/).
 * **Detailed Reporting**: Generating insightful test reports for quick analysis and debugging.
+
+---
 
 ## Why Playwright?
 
@@ -21,13 +24,17 @@ Playwright was chosen as the core automation tool for this project due to its cu
 * **Fast & Efficient Execution**: Designed for parallel test execution, leading to rapid feedback cycles.
 * **Powerful Debugging Tools**: Includes Playwright Inspector, Codegen, and Trace Viewer for efficient test development and troubleshooting.
 
+---
+
 ## Technologies Used
 
 * **Playwright Test**: The primary testing framework.
 * **Node.js / npm**: Runtime environment and package manager.
-* **TypeScript / JavaScript**: Programming language used for writing tests.
-* **Git / GitHub Actions / GitHub Pages**: For version control, continuous integration, and automated test report publishing.
-* **Allure Report**: For generating detailed and interactive test reports.
+* **TypeScript / JavaScript**: Programming language used for writing tests, leveraging **type safety**.
+* **CI/CD & Deployment**: **Git / GitHub Actions / Docker** for version control, continuous integration, and consistent environment execution.
+* **Allure Report / GitHub Pages**: For generating detailed, interactive reports and hosting the results.
+
+---
 
 ## Features & Scenarios Demonstrated
 
@@ -58,10 +65,13 @@ This project automates key functionalities and scenarios of the Sauce Demo appli
 
 ### Advanced Automation Concepts Demonstrated
 
+* **Environmental Consistency (Docker)**: Includes a **`Dockerfile`** to package the entire test environment (code, Node.js, Playwright, browsers) into an isolated container, guaranteeing consistent and reliable execution in CI/CD.
 * **Page Object Model (POM)**: Clearly structured ```pages``` directory with dedicated classes for each major application screen, encapsulating locators and actions. This ensures high maintainability and reusability.
 * **Reusable Test Flows**: Centralized common test setup procedures (e.g., ```loginAsStandardUser```) in ```utils/testFlows.ts``` to promote the DRY principle and streamline ```beforeEach``` hooks.
 * **Data Management**: Utilization of ```utils/testData.ts``` for managing test data, including standard user credentials and potentially dynamic data generation.
 * **Network Interception**: Implemented using Playwright's ```page.route()``` to intercept and mock API responses, simulate network conditions, and virtualize services, enhancing test isolation and ability to test edge cases.
+
+---
 
 ## Project Structure
 
@@ -69,7 +79,7 @@ This project automates key functionalities and scenarios of the Sauce Demo appli
 .
 ├── .github/                 # GitHub Actions workflows for CI/CD
 │   └── workflows/
-│       └── playwright.yml   # Workflow to run tests on push/PR
+│       └── playwright.yml   # Workflow to run tests on push/PR (using the Dockerized runner)
 ├── pages/                   # Page Object Model (POM) classes
 │   ├── LoginPage.ts         # Encapsulates login page elements and actions
 │   ├── ProductsPage.ts      # Encapsulates product listing page elements and actions
@@ -85,6 +95,7 @@ This project automates key functionalities and scenarios of the Sauce Demo appli
 │   ├── testData.ts          # Constants for users, URLs, etc.
 │   ├── testFlows.ts         # High-level reusable test sequences (e.g., login helper)
 │   └── ...
+├── Dockerfile               # Defines the consistent, containerized test environment
 ├── playwright.config.ts     # Playwright configuration file
 ├── package.json             # Project dependencies and scripts
 ├── package-lock.json        # Locked dependencies
@@ -96,7 +107,7 @@ This project automates key functionalities and scenarios of the Sauce Demo appli
 To get this project up and running on your local machine, follow these steps:
 
 1. Prerequisites:
-Make sure you have Node.js (which includes npm) installed.
+Make sure you have Node.js (which includes npm) and **Docker Desktop** installed.
 2. Clone the Repository:
 
     ```bash
@@ -104,7 +115,25 @@ Make sure you have Node.js (which includes npm) installed.
     cd swag-labs
     ```
 
-3. Install Dependencies:
+### Running with Docker (Recommended for Consistency)
+
+To run the tests in the isolated, consistent environment:
+
+1. **Build the Image:** (Run once, or after dependency changes)
+
+    ```bash
+    docker build -t swag-playwright-tests .
+    ```
+
+2. **Run the Tests:**
+
+    ```bash
+    docker run --rm swag-playwright-tests
+    ```
+
+### Running Locally (Classic Setup)
+
+1. Install Dependencies:
 Navigate into the project directory and install the required Node.js packages and Playwright browsers:
 
     ```bash
