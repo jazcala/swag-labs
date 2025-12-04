@@ -9,7 +9,7 @@ export class BasePage {
   readonly siteTitle: Locator;
   readonly title: Locator;
   readonly errorMessage: Locator;
-
+  readonly cartButton: Locator;
 
   /**
    * Constructor for the BasePage.
@@ -20,7 +20,7 @@ export class BasePage {
     this.title = page.locator('[data-test="title"]');
     this.siteTitle = page.locator('.app_logo');
     this.errorMessage = page.locator('[data-test="error"]');
-
+    this.cartButton = page.locator('.shopping_cart_link');
   }
 
   /**
@@ -31,7 +31,6 @@ export class BasePage {
   async goto(url: string) {
     await this.page.goto(url);
   }
-
 
   /**
    * Retrieves the text of the error message displayed on the page.
@@ -48,4 +47,12 @@ export class BasePage {
   async isErrorMessageVisible(): Promise<boolean> {
     return await this.errorMessage.isVisible(); // Check if the error message element is visible
   }
+
+  /**
+   * Views the cart page by clicking the cart button.
+   */
+  async viewCart(): Promise<void> {
+    await this.cartButton.click();
+  }
+
 }

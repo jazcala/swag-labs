@@ -19,6 +19,11 @@ export interface LoginPageExpectedConstants {
   ERROR_PROBLEM_USER: string;
 }
 
+export interface ProductsPageExpectedConstants {
+  TITLE: string;
+  PRODUCTS_COUNT: number;
+}
+
 // -- CONSTANTS OBJECTS --
 // --- BASE PAGE EXPECTED CONSTANTS ---
 export const EXPECTED_BASE_CONSTANTS: BaseConstants = {
@@ -35,4 +40,10 @@ export const EXPECTED_LOGIN_CONSTANTS = {
   ERROR_INVALID_CREDENTIALS: "Epic sadface: Username and password do not match any user in this service",
   ERROR_LOCKED_OUT: "Epic sadface: Sorry, this user has been locked out.",
   ERROR_PROBLEM_USER: "Epic sadface: Problem user"
+};
+
+// --- PRODUCTS PAGE EXPECTED CONSTANTS ---
+export const EXPECTED_PRODUCTS_CONSTANTS: ProductsPageExpectedConstants = {
+  TITLE: "Products",
+  PRODUCTS_COUNT: 6,
 };

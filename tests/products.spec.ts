@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test";
 import { ProductsPage } from "../pages/ProductsPage";
 import { loginAsStandardUser } from "../utils/testFlows";
 import { cartPageUrl, productsPageUrl, testProduct } from "../utils/testData";
+import { EXPECTED_BASE_CONSTANTS, EXPECTED_PRODUCTS_CONSTANTS } from "../utils/testConstants";
 
 test.describe("Products Tests", () => {
 
@@ -11,21 +12,21 @@ test.describe("Products Tests", () => {
   })
 
   test("should have Swag Labs as logo", async ({ page }) => {
-    const { logo, expectedLogoText } = new ProductsPage(page);
-    await expect(logo).toBeVisible();
-    await expect(logo).toHaveText(expectedLogoText);
+    const { siteTitle } = new ProductsPage(page);
+    await expect(siteTitle).toBeVisible();
+    await expect(siteTitle).toHaveText(EXPECTED_BASE_CONSTANTS.SITE_TITLE);
 
   });
 
   test("should display the products page title", async ({ page }) => {
-    const { title, expectedTitle } = new ProductsPage(page);
-    await expect(title).toHaveText(expectedTitle);
+    const { title } = new ProductsPage(page);
+    await expect(title).toHaveText(EXPECTED_PRODUCTS_CONSTANTS.TITLE);
   });
 
   test("should display the correct number of products", async ({ page }) => {
-    const { products, expectedProductsCount } = new ProductsPage(page);
+    const { products } = new ProductsPage(page);
     const productCount = await products.count();
-    expect(productCount).toBe(expectedProductsCount);
+    expect(productCount).toBe(EXPECTED_PRODUCTS_CONSTANTS.PRODUCTS_COUNT);
   });
 
   test("should display product details when clicked", async ({ page }) => {
