@@ -1,34 +1,35 @@
 import { test, expect } from "@playwright/test";
 import { LoginPage } from "../pages/LoginPage";
-import { productsPageUrl, USERS } from "../utils/testData";
+import { EXPECTED_BASE_CONSTANTS, EXPECTED_LOGIN_CONSTANTS, EXPECTED_PRODUCTS_CONSTANTS } from "../utils/testConstants";
+import { USERS } from "../utils/testData";
 
 test.describe("Login Tests", () => {
 
   test.beforeEach(async ({ page }) => {
     const loginPage = new LoginPage(page);
-    await loginPage.goto();
+    await loginPage.goto('/');
     await expect(loginPage.loginButton).toBeVisible();
   });
 
   test("should display Swag Labs as the title", async ({ page }) => {
     const loginPage = new LoginPage(page);
-    await expect(page).toHaveTitle(loginPage.expectedTitle);
+    await expect(page).toHaveTitle(EXPECTED_BASE_CONSTANTS.SITE_TITLE);
   });
 
   test("should have expected text on the login page", async ({ page }) => {
     const loginPage = new LoginPage(page);
     await expect(loginPage.usernameInput).toHaveAttribute(
       "placeholder",
-      loginPage.expectedUsernamePlaceholder
+      EXPECTED_LOGIN_CONSTANTS.USERNAME_PLACEHOLDER
     );
     //password field placeholder
     await expect(loginPage.passwordInput).toHaveAttribute(
       "placeholder",
-      loginPage.expectedPasswordPlaceholder
+      EXPECTED_LOGIN_CONSTANTS.PASSWORD_PLACEHOLDER
     );
     // login button text
     await expect(loginPage.loginButton).toHaveText(
-      loginPage.expectedLoginButtonText
+      EXPECTED_LOGIN_CONSTANTS.LOGIN_BUTTON_TEXT
     );
   });
 
@@ -37,7 +38,7 @@ test.describe("Login Tests", () => {
     const { password } = USERS.STANDARD_USER;
     loginPage.login("", password);
     await expect(loginPage.errorMessage).toHaveText(
-      loginPage.expectedErrorMessageUsernameRequired
+      EXPECTED_LOGIN_CONSTANTS.ERROR_USERNAME_REQUIRED
     );
   });
 
@@ -46,7 +47,7 @@ test.describe("Login Tests", () => {
     const { username } = USERS.STANDARD_USER;
     loginPage.login(username, "");
     await expect(page.locator(".error-message-container")).toHaveText(
-      loginPage.expectedErrorMessagePasswordRequired
+      EXPECTED_LOGIN_CONSTANTS.ERROR_PASSWORD_REQUIRED
     );
   });
 
@@ -54,7 +55,7 @@ test.describe("Login Tests", () => {
     const loginPage = new LoginPage(page);
     loginPage.login("", "");
     await expect(page.locator(".error-message-container")).toHaveText(
-      loginPage.expectedErrorMessageUsernameRequired
+      EXPECTED_LOGIN_CONSTANTS.ERROR_USERNAME_REQUIRED
     );
   });
 
@@ -62,14 +63,14 @@ test.describe("Login Tests", () => {
     const loginPage = new LoginPage(page);
     const { username, password } = USERS.STANDARD_USER;
     await loginPage.login(username, password);
-    await expect(page.url()).toContain(productsPageUrl);
+    await expect(page.url()).toContain(EXPECTED_PRODUCTS_CONSTANTS.PAGE_URL);
   });
 
   test("should not login with invalid credentials", async ({ page }) => {
     const loginPage = new LoginPage(page);
     loginPage.login("invalid_user", "invalid_password");
     await expect(loginPage.errorMessage).toHaveText(
-      loginPage.expectedErrorMessageInvalidCredentials
+      EXPECTED_LOGIN_CONSTANTS.ERROR_INVALID_CREDENTIALS
     );
   });
 
@@ -77,7 +78,7 @@ test.describe("Login Tests", () => {
     const loginPage = new LoginPage(page);
     const { username, password } = USERS.LOCKED_OUT_USER;
     loginPage.login(username, password);
-    await expect(loginPage.errorMessage).toHaveText(loginPage.expectedErrorMessageLockedOut
+    await expect(loginPage.errorMessage).toHaveText(EXPECTED_LOGIN_CONSTANTS.ERROR_LOCKED_OUT
     );
   });
 
@@ -87,7 +88,7 @@ test.describe("Login Tests", () => {
     const { username, password } = USERS.PROBLEM_USER;
     loginPage.login(username, password);
     await expect(loginPage.errorMessage).toHaveText(
-      loginPage.expectedErrorMessageProblemUser
+      EXPECTED_LOGIN_CONSTANTS.ERROR_PROBLEM_USER
     );
   });
 });

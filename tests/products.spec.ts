@@ -1,35 +1,36 @@
 import { test, expect } from "@playwright/test";
 import { ProductsPage } from "../pages/ProductsPage";
 import { loginAsStandardUser } from "../utils/testFlows";
-import { cartPageUrl, productsPageUrl, testProduct } from "../utils/testData";
+import { TEST_PRODUCT_DATA } from "../utils/testData";
+import { EXPECTED_BASE_CONSTANTS, EXPECTED_CART_CONSTANTS, EXPECTED_PRODUCTS_CONSTANTS } from "../utils/testConstants";
 
 test.describe("Products Tests", () => {
 
   test.beforeEach(async ({ page }) => {
     await loginAsStandardUser(page);
-    await expect(page).toHaveURL(productsPageUrl);
+    await expect(page).toHaveURL(EXPECTED_PRODUCTS_CONSTANTS.PAGE_URL);
   })
 
   test("should have Swag Labs as logo", async ({ page }) => {
-    const { logo, expectedLogoText } = new ProductsPage(page);
-    await expect(logo).toBeVisible();
-    await expect(logo).toHaveText(expectedLogoText);
+    const { siteTitle } = new ProductsPage(page);
+    await expect(siteTitle).toBeVisible();
+    await expect(siteTitle).toHaveText(EXPECTED_BASE_CONSTANTS.SITE_TITLE);
 
   });
 
   test("should display the products page title", async ({ page }) => {
-    const { title, expectedTitle } = new ProductsPage(page);
-    await expect(title).toHaveText(expectedTitle);
+    const { title } = new ProductsPage(page);
+    await expect(title).toHaveText(EXPECTED_PRODUCTS_CONSTANTS.TITLE);
   });
 
   test("should display the correct number of products", async ({ page }) => {
-    const { products, expectedProductsCount } = new ProductsPage(page);
+    const { products } = new ProductsPage(page);
     const productCount = await products.count();
-    expect(productCount).toBe(expectedProductsCount);
+    expect(productCount).toBe(EXPECTED_PRODUCTS_CONSTANTS.PRODUCTS_COUNT);
   });
 
   test("should display product details when clicked", async ({ page }) => {
-    const { id, name } = testProduct;
+    const { id, name } = TEST_PRODUCT_DATA;
     const productUrl = `/inventory-item.html?id=${id}`;
     const productPage = new ProductsPage(page);
     await expect(productPage.products.first()).toBeVisible();
@@ -44,7 +45,7 @@ test.describe("Products Tests", () => {
     const cartCount = await productPage.cartCount.textContent();
     expect(cartCount).toBe("1");
     const removeButton = await productPage.getFirstProductRemoveButton();
-    expect(await removeButton.textContent()).toBe("Remove");
+    expect(await removeButton.textContent()).toBe(EXPECTED_PRODUCTS_CONSTANTS.REMOVE_BUTTON_TEXT);
   });
 
 
@@ -107,7 +108,7 @@ test.describe("Products Tests", () => {
   test("should navigate to the cart page", async ({ page }) => {
     const productPage = new ProductsPage(page);
     productPage.cartButton.click();
-    await expect(page).toHaveURL(cartPageUrl);
+    await expect(page).toHaveURL(EXPECTED_CART_CONSTANTS.PAGE_URL);
   });
 
 });

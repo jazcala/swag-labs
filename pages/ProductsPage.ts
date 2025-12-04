@@ -1,33 +1,22 @@
 import { Page, Locator } from '@playwright/test';
+import { BasePage } from './BasePage';
 
 /**
  * ProductsPage class represents the products page of the Swag Labs application.
  * It encapsulates the locators and actions related to the products functionality.
  */
-export class ProductsPage {
-  readonly page: Page;
-  readonly logo: Locator;
-  readonly title: Locator;
+export class ProductsPage extends BasePage {
   readonly products: Locator;
   readonly cartCount: Locator;
   readonly sortByPriceDropdown: Locator;
   readonly productPrices: Locator;
-  readonly cartButton: Locator;
-
-  // Expected texts and attributes can be added here if needed
-  expectedTitle = "Products";
-  expectedLogoText = "Swag Labs";
-  expectedProductsCount = 6;
 
   constructor(page: Page) {
-    this.page = page;
-    this.logo = page.locator('.app_logo');
-    this.title = page.locator('[data-test="title"]');
+    super(page);
     this.products = page.locator('.inventory_item');
     this.cartCount = page.locator('.shopping_cart_badge');
     this.sortByPriceDropdown = page.locator('[data-test="product-sort-container"]');
     this.productPrices = page.locator('.inventory_item_price');
-    this.cartButton = page.locator('.shopping_cart_link');
   }
 
   async selectProduct(productName: string): Promise<void> {
@@ -68,12 +57,15 @@ export class ProductsPage {
   async sortProductsByPriceLowToHigh(): Promise<void> {
     await this.sortByPriceDropdown.selectOption('lohi');
   }
+
   async sortProductsByPriceHighToLow(): Promise<void> {
     await this.sortByPriceDropdown.selectOption('hilo');
   }
+
   async sortProductsByNameAtoZ(): Promise<void> {
     await this.sortByPriceDropdown.selectOption('az');
   }
+
   async sortProductsByNameZtoA(): Promise<void> {
     await this.sortByPriceDropdown.selectOption('za');
   }
@@ -92,6 +84,7 @@ export class ProductsPage {
     const prices = await this.getProductPrices();
     return prices.sort((a, b) => parseFloat(a) - parseFloat(b));
   }
+
   async sortPricesDescending(): Promise<string[]> {
     const prices = await this.getProductPrices();
     return prices.sort((a, b) => parseFloat(a) + parseFloat(b));
@@ -101,4 +94,5 @@ export class ProductsPage {
     const firstProductPrice = await this.products.first().locator('.inventory_item_price').textContent();
     return firstProductPrice ? firstProductPrice.replace('$', '').trim() : '';
   }
+
 }

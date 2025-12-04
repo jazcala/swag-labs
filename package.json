@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test:e2e": "npx playwright test test/",
+    "test:e2e": "npx playwright test tests/",
     "test:e2e:all": "npx playwright test tests --project=all-browsers-and-tests",
     "test:e2e:smoke": "npx playwright tests/ --grep @smoke --project ",
     "test:e2e:non-smoke": "npx playwright tests --grep-invert @smoke --project",
     "test:e2e:chrome": "npx playwright test tests --project=chromium",
-    "test:e2e:headless": "npx playwright test tests --headed=false"
+    "test:e2e:headless": "npx playwright test tests --headed=false",
+    "test:e2e:ui": "npx playwright test tests --ui"
   },
   "keywords": [],
   "author": "",

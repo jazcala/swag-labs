@@ -1,27 +1,28 @@
 import { test, expect } from "@playwright/test";
 import { ProductsPage } from "../pages/ProductsPage";
 import { CartPage } from "../pages/CartPage";
-import { loginAsStandardUser, addFirstProductToCart, viewCart } from "../utils/testFlows";
-import { cartPageUrl, checkoutPageUrl } from "../utils/testData";
+import { loginAsStandardUser } from "../utils/testFlows";
+import { EXPECTED_CART_CONSTANTS, EXPECTED_CHECKOUT_CONSTANTS } from "../utils/testConstants";
 
 test.describe("Cart Page with one product Tests", () => {
 
   test.beforeEach(async ({ page }) => {
     await loginAsStandardUser(page);
-    await addFirstProductToCart(page);
-    await viewCart(page);
-    await expect(page).toHaveURL(cartPageUrl);
+    const productsPage = new ProductsPage(page);
+    await productsPage.addFirstProductToCart();
+    await productsPage.viewCart();
+    await expect(page).toHaveURL(EXPECTED_CART_CONSTANTS.PAGE_URL);
   })
 
   test("should display the cart page", async ({ page }) => {
     const cartPage = new CartPage(page);
-    await expect(cartPage.title).toHaveText("Your Cart");
+    await expect(cartPage.title).toHaveText(EXPECTED_CART_CONSTANTS.TITLE);
     const cartQTY = await cartPage.cartQuantityLabel.textContent();
-    expect(cartQTY).toBe("QTY");
+    expect(cartQTY).toBe(EXPECTED_CART_CONSTANTS.QTY_LABEL);
     const cartDescription = await cartPage.cartDescriptionLabel.textContent();
-    expect(cartDescription).toBe("Description");
-    expect(cartPage.checkoutButton).toHaveText("Checkout");
-    expect(cartPage.continueShoppingButton).toHaveText("Continue Shopping");
+    expect(cartDescription).toBe(EXPECTED_CART_CONSTANTS.DESCRIPTION_LABEL);
+    expect(cartPage.checkoutButton).toHaveText(EXPECTED_CART_CONSTANTS.CHECKOUT_BUTTON_TEXT);
+    expect(cartPage.continueShoppingButton).toHaveText(EXPECTED_CART_CONSTANTS.CONTINUE_SHOPPING_BUTTON_TEXT);
   });
 
   test("should have one item in the cart", async ({ page }) => {
@@ -43,7 +44,7 @@ test.describe("Cart Page with one product Tests", () => {
     const cartPage = new CartPage(page);
     await expect(cartPage.checkoutButton).toBeVisible();
     await cartPage.checkoutButton.click();
-    await expect(page).toHaveURL(checkoutPageUrl);
+    await expect(page).toHaveURL(EXPECTED_CHECKOUT_CONSTANTS.PAGE_URL);
   });
 
 });
