@@ -1,45 +1,24 @@
 import { Page, Locator } from '@playwright/test';
+import { BasePage } from './BasePage';
 
 /**
  * LoginPage class represents the login page of the Swag Labs application.
  * It encapsulates the locators and actions related to the login functionality.
  */
-export class LoginPage {
-  readonly page: Page;
+export class LoginPage extends BasePage {
   readonly usernameInput: Locator;
   readonly passwordInput: Locator;
   readonly loginButton: Locator;
-  readonly errorMessage: Locator;
-
-  // Expected elements values
-  readonly expectedTitle: string = "Swag Labs";
-  readonly expectedUsernamePlaceholder: string = "Username";
-  readonly expectedPasswordPlaceholder: string = "Password";
-  readonly expectedLoginButtonText: string = "Login";
-  readonly expectedErrorMessageUsernameRequired: string = "Epic sadface: Username is required";
-  readonly expectedErrorMessagePasswordRequired: string = "Epic sadface: Password is required";
-  readonly expectedErrorMessageInvalidCredentials: string = "Epic sadface: Username and password do not match any user in this service";
-  readonly expectedErrorMessageLockedOut: string = "Epic sadface: Sorry, this user has been locked out.";
-  readonly expectedErrorMessageProblemUser: string = "Epic sadface: Problem user";
 
   /**
    * Constructor for the LoginPage.
    * @param page The Playwright Page object instance.
    */
   constructor(page: Page) {
-    this.page = page;
+    super(page);
     this.usernameInput = page.locator('[data-test="username"]');
     this.passwordInput = page.locator('[data-test="password"]');
     this.loginButton = page.locator('[data-test="login-button"]');
-    this.errorMessage = page.locator('[data-test="error"]');
-  }
-
-  /**
-   * Navigates to the Swag Labs login page.
-   * @returns A promise that resolves when the navigation is complete.
-   */
-  async goto() {
-    await this.page.goto('/');
   }
 
   /**
@@ -54,19 +33,4 @@ export class LoginPage {
     await this.loginButton.click();         // Click the login button
   }
 
-  /**
-   * Retrieves the text of the error message displayed on the page.
-   * @returns A promise that resolves with the error message text.
-   */
-  async getErrorMessageText(): Promise<string | null> {
-    return await this.errorMessage.textContent(); // Get the text content of the error message element
-  }
-
-  /**
-   * Checks if the error message is visible on the page.
-   * @returns A promise that resolves to true if the error message is visible, false otherwise.
-   */
-  async isErrorMessageVisible(): Promise<boolean> {
-    return await this.errorMessage.isVisible(); // Check if the error message element is visible
-  }
 }

@@ -83,7 +83,7 @@ test.describe("Checkout Page Tests", () => {
   test("should display an error message for empty postal code", async ({ page }) => {
     const checkoutPage = new CheckoutPage(page);
     const { firstName, lastName } = generateRandomUser();
-    checkoutPage.fillCheckoutForm(firstName, lastName, "");
+    await checkoutPage.fillCheckoutForm(firstName, lastName, "");
     await checkoutPage.continueButton.click();
     await expect(checkoutPage.errorMessage).toHaveText(checkoutPage.postalCodeError);
   });

@@ -5,6 +5,5 @@ node_modules/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
-/tests-examples/
 .env
 /tests/example.spec.ts

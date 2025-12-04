@@ -13,7 +13,7 @@ import { CheckoutOverviewPage } from "../pages/CheckoutOverviewPage";
  */
 export async function loginAsStandardUser(page: Page): Promise<void> {
   const loginPage = new LoginPage(page);
-  await loginPage.goto();
+  await loginPage.goto('/');
   await loginPage.login(USERS.STANDARD_USER.username, USERS.STANDARD_USER.password);
 }
 
