@@ -1,7 +1,12 @@
 import { test, expect } from "@playwright/test";
-import { loginAsStandardUser, addProductByName, viewCart, proceedToCheckout, fillFormAndCheckout } from "../utils/testFlows";
+import { loginAsStandardUser } from "../utils/testFlows";
 import { CheckoutOverviewPage } from "../pages/CheckoutOverviewPage";
-import { checkoutCompletePageUrl, productsPageUrl, testProduct, testCheckoutData, checkoutOverviewPageUrl } from "../utils/testData";
+import { testProduct, testCheckoutData } from "../utils/testData";
+import { fillFormAndContinue } from "../utils/testFlows";
+
+import { ProductsPage } from "../pages/ProductsPage";
+import { CartPage } from "../pages/CartPage";
+import { EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS, EXPECTED_PRODUCTS_CONSTANTS } from "../utils/testConstants";
 
 
 test.describe("Checkout Overview Tests", () => {
@@ -10,19 +15,21 @@ test.describe("Checkout Overview Tests", () => {
     // Login to the application
     await loginAsStandardUser(page);
     // Add product to the cart,
-    await addProductByName(page, testProduct.name);
+    const productsPage = new ProductsPage(page);
+    await productsPage.addToCart(testProduct.name);
     //  view cart
-    await viewCart(page);
+    await productsPage.viewCart();
     // navigate to the checkout overview page
-    await proceedToCheckout(page);
+    const cartPage = new CartPage(page);
+    await cartPage.proceedToCheckout();
     // Complete the form and proceed to checkout overview
-    await fillFormAndCheckout(page);
-    await expect(page).toHaveURL(checkoutOverviewPageUrl);
+    await fillFormAndContinue(page);
+    await expect(page).toHaveURL(EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS.PAGE_URL);
   });
 
   test("should display the correct title on checkout overview page", async ({ page }) => {
     const checkoutOverviewPage = new CheckoutOverviewPage(page);
-    await expect(checkoutOverviewPage.title).toHaveText(checkoutOverviewPage.expectedTitle);
+    await expect(checkoutOverviewPage.title).toHaveText(EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS.TITLE);
   });
 
   test("should have correct item list in the overview", async ({ page }) => {
@@ -40,47 +47,47 @@ test.describe("Checkout Overview Tests", () => {
   test("should have Payment Information section", async ({ page }) => {
     const checkoutOverviewPage = new CheckoutOverviewPage(page);
     await expect(checkoutOverviewPage.paymentInfoTitle).toBeVisible();
-    await expect(checkoutOverviewPage.paymentInfoTitle).toHaveText(checkoutOverviewPage.expectedPaymentInfoTitle);
+    await expect(checkoutOverviewPage.paymentInfoTitle).toHaveText(EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS.PAYMENT_INFO_TITLE);
     await expect(checkoutOverviewPage.paymentInfoValue).toHaveText(testCheckoutData.card);
   });
 
   test("should have Shipping Information section", async ({ page }) => {
     const checkoutOverviewPage = new CheckoutOverviewPage(page);
     await expect(checkoutOverviewPage.shippingInfoTitle).toBeVisible();
-    await expect(checkoutOverviewPage.shippingInfoTitle).toHaveText(checkoutOverviewPage.expectedShippingInfoTitle);
+    await expect(checkoutOverviewPage.shippingInfoTitle).toHaveText(EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS.SHIPPING_INFO_TITLE);
     await expect(checkoutOverviewPage.shippingInfoValue).toHaveText(testCheckoutData.shipping);
   });
 
   test("should have Price Total section", async ({ page }) => {
     const checkoutOverviewPage = new CheckoutOverviewPage(page);
     await expect(checkoutOverviewPage.totalTitle).toBeVisible();
-    await expect(checkoutOverviewPage.totalTitle).toHaveText(checkoutOverviewPage.expectedTotalTitle);
+    await expect(checkoutOverviewPage.totalTitle).toHaveText(EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS.TOTAL_TITLE);
     await expect(checkoutOverviewPage.itemSubTotalValue).toBeVisible();
-    await expect(checkoutOverviewPage.itemSubTotalValue).toHaveText(`${checkoutOverviewPage.expectedSubtotalLabel}${testProduct.price}`);
+    await expect(checkoutOverviewPage.itemSubTotalValue).toHaveText(`${EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS.SUBTOTAL_LABEL}${testProduct.price}`);
     await expect(checkoutOverviewPage.itemTaxValue).toBeVisible();
-    await expect(checkoutOverviewPage.itemTaxValue).toHaveText(`${checkoutOverviewPage.expectedTaxLabel}${testProduct.tax}`);
+    await expect(checkoutOverviewPage.itemTaxValue).toHaveText(`${EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS.TAX_LABEL}${testProduct.tax}`);
     await expect(checkoutOverviewPage.itemTotalValue).toBeVisible();
     await expect(checkoutOverviewPage.itemTotalValue).toBeVisible();
-    await expect(checkoutOverviewPage.itemTotalValue).toHaveText(`${checkoutOverviewPage.expectedTotalLabel}${(parseFloat(testProduct.price) + parseFloat(testProduct.tax)).toFixed(2)}`);
+    await expect(checkoutOverviewPage.itemTotalValue).toHaveText(`${EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS.TOTAL_LABEL}${(parseFloat(testProduct.price) + parseFloat(testProduct.tax)).toFixed(2)}`);
   });
 
   test("should have Finish and Cancel buttons", async ({ page }) => {
     const checkoutOverviewPage = new CheckoutOverviewPage(page);
     expect(checkoutOverviewPage.finishButton).toBeVisible();
-    expect(checkoutOverviewPage.finishButton).toHaveText(checkoutOverviewPage.expectedFinishButton);
+    expect(checkoutOverviewPage.finishButton).toHaveText(EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS.FINISH_BUTTON_TEXT);
     expect(checkoutOverviewPage.cancelButton).toBeVisible();
-    expect(checkoutOverviewPage.cancelButton).toHaveText(checkoutOverviewPage.expectedCancelButton);
+    expect(checkoutOverviewPage.cancelButton).toHaveText(EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS.CANCEL_BUTTON_TEXT);
   });
 
   test("should navigate to the Finish page when Finish button is clicked", async ({ page }) => {
     const checkoutOverviewPage = new CheckoutOverviewPage(page);
     await checkoutOverviewPage.finishButton.click();
-    await expect(page).toHaveURL(checkoutCompletePageUrl);
+    await expect(page).toHaveURL(EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS.PAGE_URL.replace("step-two", "complete"));
   });
 
   test("should navigate back to the cart when Cancel button is clicked", async ({ page }) => {
     const checkoutOverviewPage = new CheckoutOverviewPage(page);
     await checkoutOverviewPage.cancelButton.click();
-    await expect(page).toHaveURL(productsPageUrl);;
+    await expect(page).toHaveURL(EXPECTED_PRODUCTS_CONSTANTS.PAGE_URL);;
   });
 });

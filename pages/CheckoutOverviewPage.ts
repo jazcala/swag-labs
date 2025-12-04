@@ -1,12 +1,11 @@
 import { Page, Locator } from '@playwright/test';
+import { BasePage } from './BasePage';
 
 /**
  * CheckoutOverviewPage class represents the checkout overview page of the Swag Labs application.
  * It encapsulates the locators and actions related to the checkout overview functionality.
  */
-export class CheckoutOverviewPage {
-  readonly page: Page;
-  readonly title: Locator;
+export class CheckoutOverviewPage extends BasePage {
   readonly finishButton: Locator;
   readonly cancelButton: Locator;
   readonly paymentInfoTitle: Locator;
@@ -22,20 +21,8 @@ export class CheckoutOverviewPage {
   readonly itemSubTotalValue: Locator;
   readonly itemTaxValue: Locator;
 
-  // Expected elements values
-  readonly expectedTitle: string = "Checkout: Overview";
-  readonly expectedPaymentInfoTitle: string = "Payment Information:";
-  readonly expectedShippingInfoTitle: string = "Shipping Information:";
-  readonly expectedTotalTitle: string = "Price Total";
-  readonly expectedFinishButton: string = "Finish";
-  readonly expectedCancelButton: string = "Cancel";
-  readonly expectedSubtotalLabel: string = "Item total: $";
-  readonly expectedTaxLabel: string = "Tax: $";
-  readonly expectedTotalLabel: string = "Total: $";
-
   constructor(page: Page) {
-    this.page = page;
-    this.title = page.locator('[data-test="title"]');
+    super(page);
     this.finishButton = page.locator('[data-test="finish"]');
     this.cancelButton = page.locator('[data-test="cancel"]');
     this.paymentInfoTitle = page.locator('[data-test="payment-info-label"]');
@@ -51,4 +38,9 @@ export class CheckoutOverviewPage {
     this.itemPrice = page.locator('[data-test="inventory-item-price"]');
     this.itemDescription = page.locator('[data-test="inventory-item-desc"]');
   }
+
+  async completeCheckout(): Promise<void> {
+    await this.finishButton.click();
+  }
+
 }
