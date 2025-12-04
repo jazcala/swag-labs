@@ -10,6 +10,7 @@ export class BasePage {
   readonly title: Locator;
   readonly errorMessage: Locator;
   readonly cartButton: Locator;
+  readonly cartQuantity: Locator;
 
   /**
    * Constructor for the BasePage.
@@ -21,6 +22,7 @@ export class BasePage {
     this.siteTitle = page.locator('.app_logo');
     this.errorMessage = page.locator('[data-test="error"]');
     this.cartButton = page.locator('.shopping_cart_link');
+    this.cartQuantity = page.locator('.shopping_cart_badge');
   }
 
   /**

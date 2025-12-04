@@ -66,6 +66,9 @@ interface CheckoutOverviewPageExpectedConstants {
 interface CheckoutCompletePageExpectedConstants {
   TITLE: string;
   PAGE_URL: string;
+  MESSAGE_TITLE: string;
+  MESSAGE_DESCRIPTION: string;
+  BACK_TO_HOME_BUTTON_TEXT: string;
 }
 
 // -- CONSTANTS OBJECTS --
@@ -137,4 +140,7 @@ export const EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS: CheckoutOverviewPageExpectedC
 export const EXPECTED_CHECKOUT_COMPLETE_CONSTANTS: CheckoutCompletePageExpectedConstants = {
   TITLE: "Checkout: Complete!",
   PAGE_URL: "/checkout-complete.html",
+  MESSAGE_TITLE: "Thank you for your order!",
+  MESSAGE_DESCRIPTION: "Your order has been dispatched, and will arrive just as fast as the pony can get there!",
+  BACK_TO_HOME_BUTTON_TEXT: "Back Home",
 };

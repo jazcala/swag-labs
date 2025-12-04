@@ -7,8 +7,9 @@ import { CartPage } from "../pages/CartPage";
 import { CheckoutOverviewPage } from "../pages/CheckoutOverviewPage";
 
 /**
+ * --- AUTHENTICATION ---
  * Performs a login action for the standard user.
- * This helper encapsulates the common login steps.
+ * This helper encapsulates the common two-step login flow: navigation and login action.
  * @param page The Playwright Page object instance.
  */
 export async function loginAsStandardUser(page: Page): Promise<void> {
@@ -17,37 +18,34 @@ export async function loginAsStandardUser(page: Page): Promise<void> {
   await loginPage.login(USERS.STANDARD_USER.username, USERS.STANDARD_USER.password);
 }
 
-// ProductsPage related helper functions
-export async function addProductByName(page: Page, productName: string): Promise<void> {
-  const productsPage = new ProductsPage(page);
-  await productsPage.addToCart(productName);
-}
+/**
+ * --- CHECKOUT SUB-FLOW ---
+ * Fills out the checkout form and clicks continue.
+ * This is a sub-flow that coordinates data generation and two actions on one page.
+ * @param page The Playwright Page object instance.
+ */
 
-export async function addFirstProductToCart(page: Page): Promise<void> {
-  // Assuming there's a method to add the first product to the cart
-  // This is a placeholder for the actual implementation
-  const productsPage = new ProductsPage(page);
-  await productsPage.addFirstProductToCart();
-}
-
-export async function viewCart(page: Page): Promise<void> {
-  const productsPage = new ProductsPage(page);
-  await productsPage.cartButton.click();
-}
-
-export async function proceedToCheckout(page: Page): Promise<void> {
-  const cartPage = new CartPage(page);
-  await cartPage.checkoutButton.click();
-}
-
-export async function fillFormAndCheckout(page: Page): Promise<void> {
+export async function fillFormAndContinue(page: Page): Promise<void> {
   const checkoutPage = new CheckoutPage(page);
   const person = generateRandomUser();
   await checkoutPage.fillCheckoutForm(person.firstName, person.lastName, person.zipCode);
-  await checkoutPage.continueButton.click();
+  await checkoutPage.continueToOverview();
 }
 
-export async function completeCheckout(page: Page): Promise<void> {
+/**
+ * --- FULL PURCHASE SCENARIO ---
+ * Logs in, adds a specified product, and completes the full checkout flow.
+ * This function demonstrates the ideal use of a helper: orchestrating multiple pages.
+ * @param page The Playwright Page object instance.
+ * @param productName The name of the product to purchase.
+ */
+export async function purchaseProductFlow(page: Page, productName: string): Promise<void> {
+  await loginAsStandardUser(page);
+  const productsPage = new ProductsPage(page);
+  const cartPage = new CartPage(page);
   const checkoutOverviewPage = new CheckoutOverviewPage(page);
-  await checkoutOverviewPage.finishButton.click();
+  await productsPage.addToCart(productName);
+  await cartPage.proceedToCheckout();
+  await fillFormAndContinue(page);
+  await checkoutOverviewPage.completeCheckout();
 }

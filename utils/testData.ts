@@ -3,19 +3,19 @@ import { faker } from '@faker-js/faker';
 // User credentials for testing
 // These credentials are used to log in to the application and perform various actions
 // They are defined as an interface for better type safety and maintainability
-interface userCredentials {
+interface UserCredentials {
   username: string;
   password: string;
 }
 
-interface users {
-  STANDARD_USER: userCredentials;
-  LOCKED_OUT_USER: userCredentials;
-  PROBLEM_USER: userCredentials;
-  PERFORMANCE_GLITCH_USER: userCredentials;
+interface Users {
+  STANDARD_USER: UserCredentials;
+  LOCKED_OUT_USER: UserCredentials;
+  PROBLEM_USER: UserCredentials;
+  PERFORMANCE_GLITCH_USER: UserCredentials;
 }
 
-export const USERS: users = {
+export const USERS: Users = {
   STANDARD_USER: { username: 'standard_user', password: 'secret_sauce' },
   LOCKED_OUT_USER: { username: 'locked_out_user', password: 'secret_sauce' },
   PROBLEM_USER: { username: 'problem_user', password: 'secret_sauce' },
@@ -26,13 +26,13 @@ export const USERS: users = {
 // This function uses the faker library to create a random user object
 // It returns an object with firstName, lastName, and zipCode properties
 // This is useful for testing scenarios where you need to fill out forms with random user data
-interface userDetails {
+interface UserDetails {
   firstName: string;
   lastName: string;
   zipCode: string;
 }
 
-export const generateRandomUser = (): userDetails => {
+export const generateRandomUser = (): UserDetails => {
   return {
     firstName: faker.person.firstName(),
     lastName: faker.person.lastName(),
@@ -41,7 +41,7 @@ export const generateRandomUser = (): userDetails => {
 }
 
 // Test data for products
-interface testProduct {
+interface TestProductShape {
   id: number;
   name: string;
   price: string;
@@ -49,19 +49,22 @@ interface testProduct {
   description: string;
 }
 
-export const testProduct: testProduct =
+export const TEST_PRODUCT_DATA: TestProductShape =
 {
-  id: 4, name: 'Sauce Labs Backpack', price: '29.99', tax: '2.40',
+  id: 4,
+  name: 'Sauce Labs Backpack',
+  price: '29.99',
+  tax: '2.40',
   description: 'carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection.'
 };
 
 // Test data for checkout
-interface testCheckoutData {
+interface TestCheckoutData {
   card: string;
   shipping: string;
 }
 
-export const testCheckoutData: testCheckoutData = {
+export const TEST_CHECKOUT_DATA: TestCheckoutData = {
   card: 'SauceCard #31337',
   shipping: "Free Pony Express Delivery!"
 }
