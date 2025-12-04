@@ -40,13 +40,6 @@ export const generateRandomUser = (): userDetails => {
   };
 }
 
-// URLs for the application pages
-export const productsPageUrl: string = '/inventory.html';
-export const cartPageUrl: string = '/cart.html';
-export const checkoutPageUrl: string = '/checkout-step-one.html';
-export const checkoutOverviewPageUrl: string = '/checkout-step-two.html';
-export const checkoutCompletePageUrl: string = '/checkout-complete.html';
-
 // Test data for products
 interface testProduct {
   id: number;

@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { LoginPage } from "../pages/LoginPage";
-import { EXPECTED_BASE_CONSTANTS, EXPECTED_LOGIN_CONSTANTS } from "../utils/testConstants";
-import { productsPageUrl, USERS } from "../utils/testData";
+import { EXPECTED_BASE_CONSTANTS, EXPECTED_LOGIN_CONSTANTS, EXPECTED_PRODUCTS_CONSTANTS } from "../utils/testConstants";
+import { USERS } from "../utils/testData";
 
 test.describe("Login Tests", () => {
 
@@ -63,7 +63,7 @@ test.describe("Login Tests", () => {
     const loginPage = new LoginPage(page);
     const { username, password } = USERS.STANDARD_USER;
     await loginPage.login(username, password);
-    await expect(page.url()).toContain(productsPageUrl);
+    await expect(page.url()).toContain(EXPECTED_PRODUCTS_CONSTANTS.PAGE_URL);
   });
 
   test("should not login with invalid credentials", async ({ page }) => {

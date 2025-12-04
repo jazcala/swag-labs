@@ -1,14 +1,14 @@
 import { test, expect } from "@playwright/test";
 import { ProductsPage } from "../pages/ProductsPage";
 import { loginAsStandardUser } from "../utils/testFlows";
-import { cartPageUrl, productsPageUrl, testProduct } from "../utils/testData";
-import { EXPECTED_BASE_CONSTANTS, EXPECTED_PRODUCTS_CONSTANTS } from "../utils/testConstants";
+import { testProduct } from "../utils/testData";
+import { EXPECTED_BASE_CONSTANTS, EXPECTED_CART_CONSTANTS, EXPECTED_PRODUCTS_CONSTANTS } from "../utils/testConstants";
 
 test.describe("Products Tests", () => {
 
   test.beforeEach(async ({ page }) => {
     await loginAsStandardUser(page);
-    await expect(page).toHaveURL(productsPageUrl);
+    await expect(page).toHaveURL(EXPECTED_PRODUCTS_CONSTANTS.PAGE_URL);
   })
 
   test("should have Swag Labs as logo", async ({ page }) => {
@@ -45,7 +45,7 @@ test.describe("Products Tests", () => {
     const cartCount = await productPage.cartCount.textContent();
     expect(cartCount).toBe("1");
     const removeButton = await productPage.getFirstProductRemoveButton();
-    expect(await removeButton.textContent()).toBe("Remove");
+    expect(await removeButton.textContent()).toBe(EXPECTED_PRODUCTS_CONSTANTS.REMOVE_BUTTON_TEXT);
   });
 
 
@@ -108,7 +108,7 @@ test.describe("Products Tests", () => {
   test("should navigate to the cart page", async ({ page }) => {
     const productPage = new ProductsPage(page);
     productPage.cartButton.click();
-    await expect(page).toHaveURL(cartPageUrl);
+    await expect(page).toHaveURL(EXPECTED_CART_CONSTANTS.PAGE_URL);
   });
 
 });
