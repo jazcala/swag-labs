@@ -26,6 +26,7 @@ export interface ProductsPageExpectedConstants {
   PRODUCTS_COUNT: number;
   PAGE_URL: string;
   REMOVE_BUTTON_TEXT: string;
+  ADD_TO_CART_BUTTON_TEXT: string;
 }
 
 export interface CartPageExpectedConstants {
@@ -97,6 +98,7 @@ export const EXPECTED_PRODUCTS_CONSTANTS: ProductsPageExpectedConstants = {
   PRODUCTS_COUNT: 6,
   PAGE_URL: "/inventory.html",
   REMOVE_BUTTON_TEXT: "Remove",
+  ADD_TO_CART_BUTTON_TEXT: "Add to cart",
 };
 
 // --- CART PAGE EXPECTED CONSTANTS ---
