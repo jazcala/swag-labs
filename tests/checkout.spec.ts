@@ -69,28 +69,4 @@ test.describe("Checkout Page Tests", () => {
     await expect(title).toHaveText(EXPECTED_CART_CONSTANTS.TITLE);
   });
 
-  test("should display an error message for empty first name", async ({ page }) => {
-    const checkoutPage = new CheckoutPage(page);
-    const { lastName, zipCode } = generateRandomUser();
-    checkoutPage.fillCheckoutForm("", lastName, zipCode);
-    await checkoutPage.continueButton.click();
-    await expect(checkoutPage.errorMessage).toHaveText(EXPECTED_CHECKOUT_CONSTANTS.FIRST_NAME_ERROR);
-  });
-
-  test("should display an error message for empty last name", async ({ page }) => {
-    const checkoutPage = new CheckoutPage(page);
-    const { firstName, zipCode } = generateRandomUser();
-    checkoutPage.fillCheckoutForm(firstName, "", zipCode);
-    await checkoutPage.continueButton.click();
-    await expect(checkoutPage.errorMessage).toHaveText(EXPECTED_CHECKOUT_CONSTANTS.LAST_NAME_ERROR);
-  });
-
-  test("should display an error message for empty postal code", async ({ page }) => {
-    const checkoutPage = new CheckoutPage(page);
-    const { firstName, lastName } = generateRandomUser();
-    await checkoutPage.fillCheckoutForm(firstName, lastName, "");
-    await checkoutPage.continueButton.click();
-    await expect(checkoutPage.errorMessage).toHaveText(EXPECTED_CHECKOUT_CONSTANTS.ZIP_CODE_ERROR);
-  });
-
 });

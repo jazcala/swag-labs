@@ -19,6 +19,27 @@ export async function loginAsStandardUser(page: Page): Promise<void> {
 }
 
 /**
+ * Helper function that sets up the environment for Checkout Form validation tests.
+ * Steps: 1. Login. 2. Add item to cart. 3. Navigate to Checkout Step One page.
+ * @param page The Playwright Page object.
+ * @param productName The name of the product to add to the cart (defaults to standard test product).
+ */
+export async function setupForCheckoutFormTest(
+  page: Page,
+  productName: string,
+) {
+  await loginAsStandardUser(page);
+  const productsPage = new ProductsPage(page);
+  const cartPage = new CartPage(page);
+  // 1. Add a product to the cart using the passed variable
+  await productsPage.addToCart(productName);
+  // 2. Navigate to the cart
+  await productsPage.viewCart();
+  // 3. Proceed to checkout
+  await cartPage.proceedToCheckout();
+}
+
+/**
  * --- CHECKOUT SUB-FLOW ---
  * Fills out the checkout form and clicks continue.
  * This is a sub-flow that coordinates data generation and two actions on one page.
