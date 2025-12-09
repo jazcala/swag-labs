@@ -6,13 +6,14 @@ import { EXPECTED_CART_CONSTANTS, EXPECTED_CHECKOUT_CONSTANTS } from "../utils/t
 
 test.describe("Cart Page with one product Tests", () => {
 
+
   test.beforeEach(async ({ page }) => {
     await loginAsStandardUser(page);
     const productsPage = new ProductsPage(page);
     await productsPage.addFirstProductToCart();
     await productsPage.viewCart();
     await expect(page).toHaveURL(EXPECTED_CART_CONSTANTS.PAGE_URL);
-  })
+  });
 
   test("should display the cart page", async ({ page }) => {
     const cartPage = new CartPage(page);

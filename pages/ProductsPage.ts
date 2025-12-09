@@ -48,6 +48,11 @@ export class ProductsPage extends BasePage {
     return firstProduct.locator('.btn_secondary');
   }
 
+  async getFirstProductAddToCartButton(): Promise<Locator> {
+    const firstProduct = this.products.first();
+    return firstProduct.locator('.btn_primary');
+  }
+
   async getFirstProductName(): Promise<String> {
     const firstProduct = this.products.first();
     const name = await firstProduct.locator('.inventory_item_name').textContent();
