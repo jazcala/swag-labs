@@ -6,7 +6,6 @@ import { EXPECTED_CART_CONSTANTS, EXPECTED_CHECKOUT_CONSTANTS } from "../utils/t
 
 test.describe("Cart Page with one product Tests", () => {
 
-
   test.beforeEach(async ({ page }) => {
     await loginAsStandardUser(page);
     const productsPage = new ProductsPage(page);
@@ -28,8 +27,7 @@ test.describe("Cart Page with one product Tests", () => {
 
   test("should have one item in the cart", async ({ page }) => {
     const cartPage = new CartPage(page);
-    const cartCount = await cartPage.cartQuantity.textContent();
-    expect(cartCount).toBe('1');
+    expect(await cartPage.getCartItemCount()).toBe(1);
   });
 
   test("should remove item from the cart", async ({ page }) => {
@@ -38,7 +36,7 @@ test.describe("Cart Page with one product Tests", () => {
     expect(cartCount).toBe('1');
     const firstProductRemoveButton = await cartPage.getFirstRemoveButton();
     await firstProductRemoveButton.click();
-    await expect(cartPage.cartQuantity).not.toBeVisible();
+    expect(await cartPage.getCartItemCount()).toBe(0);
   });
 
   test("should proceed to checkout after clicking the button", async ({ page }) => {
