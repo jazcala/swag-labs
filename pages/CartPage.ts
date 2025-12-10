@@ -10,7 +10,6 @@ export class CartPage extends BasePage {
   readonly cartDescriptionLabel: Locator;
   readonly checkoutButton: Locator;
   readonly continueShoppingButton: Locator;
-  readonly cartQuantity: Locator;
   readonly removeButton: Locator;
 
   constructor(page: Page) {
@@ -19,7 +18,6 @@ export class CartPage extends BasePage {
     this.cartDescriptionLabel = page.locator('.cart_desc_label');
     this.checkoutButton = page.locator('[data-test="checkout"]');
     this.continueShoppingButton = page.locator('[data-test="continue-shopping"]');
-    this.cartQuantity = page.locator('[data-test="shopping-cart-badge"]');
     this.removeButton = page.locator('.cart_button');
   }
 

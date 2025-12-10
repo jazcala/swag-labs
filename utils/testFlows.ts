@@ -5,17 +5,32 @@ import { ProductsPage } from "../pages/ProductsPage";
 import { CheckoutPage } from "../pages/CheckoutPage";
 import { CartPage } from "../pages/CartPage";
 import { CheckoutOverviewPage } from "../pages/CheckoutOverviewPage";
+import { EXPECTED_LOGIN_CONSTANTS } from "./testConstants";
 
 /**
- * --- AUTHENTICATION ---
- * Performs a login action for the standard user.
- * This helper encapsulates the common two-step login flow: navigation and login action.
- * @param page The Playwright Page object instance.
+ * Helper function to perform login with given credentials.
+ * @param page The Playwright Page object.
+ * @param username The username for login.
+ * @param password The password for login.
+ */
+
+async function login(page: Page, username: string, password: string): Promise<LoginPage> {
+  const loginPage = new LoginPage(page);
+  await loginPage.goto(EXPECTED_LOGIN_CONSTANTS.PAGE_URL);
+  await loginPage.login(username, password);
+  return loginPage;
+
+}
+
+/** --- LOGIN FLOWS ---
+ * These functions encapsulate common login scenarios for reuse across tests.
  */
 export async function loginAsStandardUser(page: Page): Promise<void> {
-  const loginPage = new LoginPage(page);
-  await loginPage.goto('/');
-  await loginPage.login(USERS.STANDARD_USER.username, USERS.STANDARD_USER.password);
+  await login(page, USERS.STANDARD_USER.username, USERS.STANDARD_USER.password);
+}
+
+export async function loginAsLockedOutUser(page: Page): Promise<LoginPage> {
+  return await login(page, USERS.LOCKED_OUT_USER.username, USERS.LOCKED_OUT_USER.password);
 }
 
 /**

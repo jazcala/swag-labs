@@ -9,9 +9,21 @@ export class BasePage {
   readonly siteTitle: Locator;
   readonly title: Locator;
   readonly errorMessage: Locator;
+  //--- Global Cart Elements ---
   readonly cartButton: Locator;
   readonly cartQuantity: Locator;
-
+  //--- Global Sidebar Elements ---
+  readonly sidebarMenuButton: Locator;
+  readonly allItemsLink: Locator;
+  readonly aboutLink: Locator;
+  readonly logoutLink: Locator;
+  readonly resetAppStateLink: Locator;
+  //--- Global Footer Elements ---
+  readonly footerContainer: Locator;
+  readonly twitterLink: Locator;
+  readonly facebookLink: Locator;
+  readonly linkedinLink: Locator;
+  readonly copyrightText: Locator;
   /**
    * Constructor for the BasePage.
    * @param page The Playwright Page object instance.
@@ -21,8 +33,21 @@ export class BasePage {
     this.title = page.locator('[data-test="title"]');
     this.siteTitle = page.locator('.app_logo');
     this.errorMessage = page.locator('[data-test="error"]');
+    // --- Globar Cart Elements Inicialization ---
     this.cartButton = page.locator('.shopping_cart_link');
     this.cartQuantity = page.locator('.shopping_cart_badge');
+    // --- Global Sidebar Elements Inicialization ---
+    this.sidebarMenuButton = page.locator('#react-burger-menu-btn');
+    this.allItemsLink = page.locator('#inventory_sidebar_link');
+    this.aboutLink = page.locator('#about_sidebar_link');
+    this.logoutLink = page.locator('#logout_sidebar_link');
+    this.resetAppStateLink = page.locator('#reset_sidebar_link');
+    // --- Global Footer Elements Inicialization ---
+    this.footerContainer = page.locator('.footer');
+    this.twitterLink = page.locator('a[href="https://twitter.com/saucelabs"]');
+    this.facebookLink = page.locator('a[href="https://www.facebook.com/saucelabs"]');
+    this.linkedinLink = page.locator('a[href="https://www.linkedin.com/company/sauce-labs/"]');
+    this.copyrightText = page.locator('.footer_copy');
   }
 
   /**
@@ -34,6 +59,7 @@ export class BasePage {
     await this.page.goto(url);
   }
 
+  // --- Reusable Error Message Methods ---
   /**
    * Retrieves the text of the error message displayed on the page.
    * @returns A promise that resolves with the error message text.
@@ -49,6 +75,7 @@ export class BasePage {
   async isErrorMessageVisible(): Promise<boolean> {
     return await this.errorMessage.isVisible(); // Check if the error message element is visible
   }
+  //--- Cart Methods ---
 
   /**
    * Views the cart page by clicking the cart button.
@@ -56,5 +83,28 @@ export class BasePage {
   async viewCart(): Promise<void> {
     await this.cartButton.click();
   }
+  async getCartItemCount(): Promise<number> {
+    const isVisible = await this.cartQuantity.isVisible();
+    if (!isVisible) {
+      return 0;
+    }
+    const countText = await this.cartQuantity.textContent();
+    return Number(countText);
+  }
 
+  // --- Sidebar Methods ---
+
+  /**
+   * Opens the hamburger sidebar menu.
+   */
+  async openSidebarMenu(): Promise<void> {
+    await this.sidebarMenuButton.click();
+  }
+
+  /**
+   * Clicks the Logout link in the sidebar menu.
+   */
+  async clickLogout(): Promise<void> {
+    await this.logoutLink.click();
+  }
 }
