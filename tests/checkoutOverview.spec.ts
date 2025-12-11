@@ -5,7 +5,7 @@ import { TEST_PRODUCT_DATA, TEST_CHECKOUT_DATA } from "../utils/testData";
 import { fillFormAndContinue } from "../utils/testFlows";
 import { ProductsPage } from "../pages/ProductsPage";
 import { CartPage } from "../pages/CartPage";
-import { EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS, EXPECTED_PRODUCTS_CONSTANTS } from "../utils/testConstants";
+import { EXPECTED_CHECKOUT_COMPLETE_CONSTANTS, EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS, EXPECTED_PRODUCTS_CONSTANTS } from "../utils/testConstants";
 
 
 test.describe("Checkout Overview Tests", () => {
@@ -81,7 +81,7 @@ test.describe("Checkout Overview Tests", () => {
   test("should navigate to the Finish page when Finish button is clicked", async ({ page }) => {
     const checkoutOverviewPage = new CheckoutOverviewPage(page);
     await checkoutOverviewPage.finishButton.click();
-    await expect(page).toHaveURL(EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS.PAGE_URL.replace("step-two", "complete"));
+    await expect(page).toHaveURL(EXPECTED_CHECKOUT_COMPLETE_CONSTANTS.PAGE_URL);
   });
 
   test("should navigate back to the cart when Cancel button is clicked", async ({ page }) => {
