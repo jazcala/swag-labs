@@ -5,6 +5,25 @@
 
 // -- INTERFACES for EXPECTED CONSTANTS --
 /** Defines the expected structure for global text constants applicable to the entire site. */
+export interface PAGE_URL_PATHS {
+  LOGIN_PAGE: string;
+  PRODUCTS_PAGE: string;
+  CART_PAGE: string;
+  CHECKOUT_PAGE_STEP_1: string;
+  CHECKOUT_PAGE_STEP_2: string;
+  CHECKOUT_COMPLETE: string;
+}
+
+export interface SocialLink {
+  name: string;
+  expectedUrl: string;
+}
+
+export interface FooterConstants {
+  EXPECTED_SOCIAL_LINKS: SocialLink[];
+  COPYRIGHT_TEXT: string;
+}
+
 export interface BaseConstants {
   SITE_TITLE: string;
 }
@@ -74,6 +93,16 @@ interface CheckoutCompletePageExpectedConstants {
 }
 
 // -- CONSTANTS OBJECTS --
+//-- URL PATHS ---
+export const EXPECTED_URL_PATHS: PAGE_URL_PATHS = {
+  LOGIN_PAGE: '/',
+  PRODUCTS_PAGE: '/inventory.html',
+  CART_PAGE: '/cart.html',
+  CHECKOUT_PAGE_STEP_1: '/checkout-step-one.html',
+  CHECKOUT_PAGE_STEP_2: '/checkout-step-two.html',
+  CHECKOUT_COMPLETE: '/checkout-complete.html',
+};
+
 // --- BASE PAGE EXPECTED CONSTANTS ---
 export const EXPECTED_BASE_CONSTANTS: BaseConstants = {
   SITE_TITLE: "Swag Labs",
@@ -89,14 +118,14 @@ export const EXPECTED_LOGIN_CONSTANTS = {
   ERROR_INVALID_CREDENTIALS: "Epic sadface: Username and password do not match any user in this service",
   ERROR_LOCKED_OUT: "Epic sadface: Sorry, this user has been locked out.",
   ERROR_PROBLEM_USER: "Epic sadface: Problem user",
-  PAGE_URL: "/",
+  PAGE_URL: EXPECTED_URL_PATHS.LOGIN_PAGE,
 };
 
 // --- PRODUCTS PAGE EXPECTED CONSTANTS ---
 export const EXPECTED_PRODUCTS_CONSTANTS: ProductsPageExpectedConstants = {
   TITLE: "Products",
   PRODUCTS_COUNT: 6,
-  PAGE_URL: "/inventory.html",
+  PAGE_URL: EXPECTED_URL_PATHS.PRODUCTS_PAGE,
   REMOVE_BUTTON_TEXT: "Remove",
   ADD_TO_CART_BUTTON_TEXT: "Add to cart",
 };
@@ -105,7 +134,7 @@ export const EXPECTED_PRODUCTS_CONSTANTS: ProductsPageExpectedConstants = {
 export const EXPECTED_CART_CONSTANTS: CartPageExpectedConstants = {
   TITLE: "Your Cart",
   EMPTY_CART_MESSAGE: "Your cart is empty",
-  PAGE_URL: "/cart.html",
+  PAGE_URL: EXPECTED_URL_PATHS.CART_PAGE,
   QTY_LABEL: "QTY",
   DESCRIPTION_LABEL: "Description",
   CHECKOUT_BUTTON_TEXT: "Checkout",
@@ -115,7 +144,7 @@ export const EXPECTED_CART_CONSTANTS: CartPageExpectedConstants = {
 // --- CHECKOUT PAGE EXPECTED CONSTANTS ---
 export const EXPECTED_CHECKOUT_CONSTANTS: CheckoutPageExpectedConstants = {
   TITLE: "Checkout: Your Information",
-  PAGE_URL: "/checkout-step-one.html",
+  PAGE_URL: EXPECTED_URL_PATHS.CHECKOUT_PAGE_STEP_1,
   FIRST_NAME_PLACEHOLDER: "First Name",
   LAST_NAME_PLACEHOLDER: "Last Name",
   ZIP_CODE_PLACEHOLDER: "Zip/Postal Code",
@@ -129,7 +158,7 @@ export const EXPECTED_CHECKOUT_CONSTANTS: CheckoutPageExpectedConstants = {
 // --- CHECKOUT OVERVIEW PAGE EXPECTED CONSTANTS ---
 export const EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS: CheckoutOverviewPageExpectedConstants = {
   TITLE: "Checkout: Overview",
-  PAGE_URL: "/checkout-step-two.html",
+  PAGE_URL: EXPECTED_URL_PATHS.CHECKOUT_PAGE_STEP_2,
   PAYMENT_INFO_TITLE: "Payment Information:",
   SHIPPING_INFO_TITLE: "Shipping Information:",
   TOTAL_TITLE: "Price Total",
@@ -143,8 +172,19 @@ export const EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS: CheckoutOverviewPageExpectedC
 // --- CHECKOUT COMPLETE PAGE EXPECTED CONSTANTS ---
 export const EXPECTED_CHECKOUT_COMPLETE_CONSTANTS: CheckoutCompletePageExpectedConstants = {
   TITLE: "Checkout: Complete!",
-  PAGE_URL: "/checkout-complete.html",
+  PAGE_URL: EXPECTED_URL_PATHS.CHECKOUT_COMPLETE,
   MESSAGE_TITLE: "Thank you for your order!",
   MESSAGE_DESCRIPTION: "Your order has been dispatched, and will arrive just as fast as the pony can get there!",
   BACK_TO_HOME_BUTTON_TEXT: "Back Home",
 };
+
+export const EXPECTED_SOCIAL_LINKS: SocialLink[] = [
+  { name: 'Twitter', expectedUrl: 'https://x.com/saucelabs' },
+  { name: 'Facebook', expectedUrl: 'https://www.facebook.com/saucelabs' },
+  { name: 'LinkedIn', expectedUrl: 'https://www.linkedin.com/company/sauce-labs/' },
+];
+
+export const EXPECTED_FOOTER_CONSTANTS: FooterConstants = {
+  EXPECTED_SOCIAL_LINKS: EXPECTED_SOCIAL_LINKS,
+  COPYRIGHT_TEXT: "© 2025 Sauce Labs. All Rights Reserved. Terms of Service | Privacy Policy"
+}

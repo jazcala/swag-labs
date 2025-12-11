@@ -48,8 +48,8 @@ export class BasePage {
     this.footerContainer = page.locator('[data-test="footer"]');
     this.twitterLink = page.locator('[data-test="social-twitter"]');
     this.facebookLink = page.locator('[data-test="social-facebook"]');
-    this.linkedinLink = page.locator('data-test="social-linkedin"]');
-    this.copyrightText = page.locator('[data-test="footer_copy"]');
+    this.linkedinLink = page.locator('[data-test="social-linkedin"]');
+    this.copyrightText = page.locator('[data-test="footer-copy"]');
   }
 
   /**
