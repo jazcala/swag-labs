@@ -49,13 +49,8 @@ export interface ProductsPageExpectedConstants {
 }
 
 export interface CartPageExpectedConstants {
-  TITLE: string;
   PAGE_URL: string;
   EMPTY_CART_MESSAGE: string;
-  QTY_LABEL: string;
-  DESCRIPTION_LABEL: string;
-  CHECKOUT_BUTTON_TEXT: string;
-  CONTINUE_SHOPPING_BUTTON_TEXT: string;
 }
 
 interface CheckoutPageExpectedConstants {
@@ -132,13 +127,8 @@ export const EXPECTED_PRODUCTS_CONSTANTS: ProductsPageExpectedConstants = {
 
 // --- CART PAGE EXPECTED CONSTANTS ---
 export const EXPECTED_CART_CONSTANTS: CartPageExpectedConstants = {
-  TITLE: "Your Cart",
   EMPTY_CART_MESSAGE: "Your cart is empty",
   PAGE_URL: EXPECTED_URL_PATHS.CART_PAGE,
-  QTY_LABEL: "QTY",
-  DESCRIPTION_LABEL: "Description",
-  CHECKOUT_BUTTON_TEXT: "Checkout",
-  CONTINUE_SHOPPING_BUTTON_TEXT: "Continue Shopping",
 };
 
 // --- CHECKOUT PAGE EXPECTED CONSTANTS ---

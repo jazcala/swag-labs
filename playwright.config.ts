@@ -11,6 +11,7 @@ export default defineConfig({
     baseURL: "https://www.saucedemo.com/",
     trace: "on-first-retry",
     screenshot: "only-on-failure",
+    testIdAttribute: "data-test", // Custom test ID attribute configuration - to getByTestId working
   },
 
   /* Configure projects for major browsers */

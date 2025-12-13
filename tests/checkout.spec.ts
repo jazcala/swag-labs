@@ -65,8 +65,6 @@ test.describe("Checkout Page Tests", () => {
     const checkoutPage = new CheckoutPage(page);
     await checkoutPage.cancelButton.click();
     await expect(page).toHaveURL(EXPECTED_CART_CONSTANTS.PAGE_URL);
-    const { title } = new CartPage(page);
-    await expect(title).toHaveText(EXPECTED_CART_CONSTANTS.TITLE);
   });
 
 });

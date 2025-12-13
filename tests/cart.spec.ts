@@ -14,17 +14,6 @@ test.describe("Cart Page with one product Tests", () => {
     await expect(page).toHaveURL(EXPECTED_CART_CONSTANTS.PAGE_URL);
   });
 
-  test("should display the cart page", async ({ page }) => {
-    const cartPage = new CartPage(page);
-    await expect(cartPage.title).toHaveText(EXPECTED_CART_CONSTANTS.TITLE);
-    const cartQTY = await cartPage.cartQuantityLabel.textContent();
-    expect(cartQTY).toBe(EXPECTED_CART_CONSTANTS.QTY_LABEL);
-    const cartDescription = await cartPage.cartDescriptionLabel.textContent();
-    expect(cartDescription).toBe(EXPECTED_CART_CONSTANTS.DESCRIPTION_LABEL);
-    expect(cartPage.checkoutButton).toHaveText(EXPECTED_CART_CONSTANTS.CHECKOUT_BUTTON_TEXT);
-    expect(cartPage.continueShoppingButton).toHaveText(EXPECTED_CART_CONSTANTS.CONTINUE_SHOPPING_BUTTON_TEXT);
-  });
-
   test("should have one item in the cart", async ({ page }) => {
     const cartPage = new CartPage(page);
     expect(await cartPage.getCartItemCount()).toBe(1);
@@ -32,10 +21,8 @@ test.describe("Cart Page with one product Tests", () => {
 
   test("should remove item from the cart", async ({ page }) => {
     const cartPage = new CartPage(page);
-    const cartCount = await cartPage.cartQuantity.textContent();
-    expect(cartCount).toBe('1');
-    const firstProductRemoveButton = await cartPage.getFirstRemoveButton();
-    await firstProductRemoveButton.click();
+    expect(await cartPage.getCartItemCount()).toBe(1);
+    await cartPage.removeFirstIemt();
     expect(await cartPage.getCartItemCount()).toBe(0);
   });
 

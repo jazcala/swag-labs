@@ -31,8 +31,10 @@ export class BasePage {
    */
   constructor(page: Page) {
     this.page = page;
+    this.siteTitle = page.getByText('Swag Labs');
+    // TODO REMOVE TITLE AFTER EACH PAGE HAS IT OWN TITLE LOCATOR
     this.title = page.locator('[data-test="title"]');
-    this.siteTitle = page.locator('.app_logo');
+    // --- Global Error Message Element Inicialization ---
     this.errorMessage = page.locator('[data-test="error"]');
     // --- Globar Cart Elements Inicialization ---
     this.cartButton = page.locator('[data-test="shopping-cart-link"]');
