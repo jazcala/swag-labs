@@ -59,13 +59,7 @@ interface CheckoutPageExpectedConstants {
 }
 
 interface CheckoutOverviewPageExpectedConstants {
-  TITLE: string;
   PAGE_URL: string;
-  PAYMENT_INFO_TITLE: string;
-  SHIPPING_INFO_TITLE: string;
-  TOTAL_TITLE: string;
-  FINISH_BUTTON_TEXT: string;
-  CANCEL_BUTTON_TEXT: string;
   SUBTOTAL_LABEL: string;
   TAX_LABEL: string;
   TOTAL_LABEL: string;
@@ -131,13 +125,7 @@ export const EXPECTED_CHECKOUT_CONSTANTS: CheckoutPageExpectedConstants = {
 
 // --- CHECKOUT OVERVIEW PAGE EXPECTED CONSTANTS ---
 export const EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS: CheckoutOverviewPageExpectedConstants = {
-  TITLE: "Checkout: Overview",
   PAGE_URL: EXPECTED_URL_PATHS.CHECKOUT_PAGE_STEP_2,
-  PAYMENT_INFO_TITLE: "Payment Information:",
-  SHIPPING_INFO_TITLE: "Shipping Information:",
-  TOTAL_TITLE: "Price Total",
-  FINISH_BUTTON_TEXT: "Finish",
-  CANCEL_BUTTON_TEXT: "Cancel",
   SUBTOTAL_LABEL: "Item total: $",
   TAX_LABEL: "Tax: $",
   TOTAL_LABEL: "Total: $"
