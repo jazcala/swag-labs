@@ -28,10 +28,7 @@ test.describe("Negative Tests (Application Flow Errors)", () => {
 
     const cartPage = new CartPage(page);
     // 2. Attempt to click Checkout button
-    const checkoutButton = cartPage.checkoutButton;
-    // page.locator(EXPECTED_CART_CONSTANTS.CHECKOUT_BUTTON_SELECTOR);
-    await expect(checkoutButton).toBeVisible();
-    await checkoutButton.click();
+    await cartPage.proceedToCheckout()
 
     // 3. Verify that the system redirects back to the Products page
     await expect(page).toHaveURL(EXPECTED_PRODUCTS_CONSTANTS.PAGE_URL);
@@ -40,8 +37,6 @@ test.describe("Negative Tests (Application Flow Errors)", () => {
   // --- Checkout Form Error Scenarios ---
 
   test.describe("Checkout Form Validation", () => {
-
-    let checkoutPage: CheckoutPage;
 
     test.beforeEach(async ({ page }) => {
       // Setup the page by navigating to the Checkout Step One form with an item ready.
@@ -54,32 +49,28 @@ test.describe("Negative Tests (Application Flow Errors)", () => {
       await expect(page).toHaveURL(EXPECTED_CHECKOUT_CONSTANTS.PAGE_URL);
     });
 
-    test.afterEach(async ({ page }) => {
-      await expect(page).toHaveURL(EXPECTED_CHECKOUT_CONSTANTS.PAGE_URL);
-    })
-
     test("should display an error when first name is missing", async ({ page }) => {
-      checkoutPage = new CheckoutPage(page);
+      const checkoutPage = new CheckoutPage(page);
       const { lastName, zipCode } = generateRandomUser();
-      checkoutPage.fillCheckoutForm("", lastName, zipCode);
-      await checkoutPage.continueButton.click();
+      await checkoutPage.fillFormAndContinue("", lastName, zipCode);
       await expect(checkoutPage.errorMessage).toHaveText(EXPECTED_CHECKOUT_CONSTANTS.FIRST_NAME_ERROR);
+      await expect(page).toHaveURL(EXPECTED_CHECKOUT_CONSTANTS.PAGE_URL);
     });
 
     test("should display an error when last name is missing", async ({ page }) => {
-      checkoutPage = new CheckoutPage(page);
+      const checkoutPage = new CheckoutPage(page);
       const { firstName, zipCode } = generateRandomUser();
-      checkoutPage.fillCheckoutForm(firstName, "", zipCode);
-      await checkoutPage.continueButton.click();
+      await checkoutPage.fillFormAndContinue(firstName, "", zipCode);
       await expect(checkoutPage.errorMessage).toHaveText(EXPECTED_CHECKOUT_CONSTANTS.LAST_NAME_ERROR);
+      await expect(page).toHaveURL(EXPECTED_CHECKOUT_CONSTANTS.PAGE_URL);
     });
 
     test("should display an error when postal code is missing", async ({ page }) => {
       const checkoutPage = new CheckoutPage(page);
       const { firstName, lastName } = generateRandomUser();
-      await checkoutPage.fillCheckoutForm(firstName, lastName, "");
-      await checkoutPage.continueButton.click();
+      await checkoutPage.fillFormAndContinue(firstName, lastName, "");
       await expect(checkoutPage.errorMessage).toHaveText(EXPECTED_CHECKOUT_CONSTANTS.ZIP_CODE_ERROR);
+      await expect(page).toHaveURL(EXPECTED_CHECKOUT_CONSTANTS.PAGE_URL);
     });
 
   });

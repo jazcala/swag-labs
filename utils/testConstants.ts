@@ -52,13 +52,7 @@ export interface CartPageExpectedConstants {
 }
 
 interface CheckoutPageExpectedConstants {
-  TITLE: string;
   PAGE_URL: string;
-  FIRST_NAME_PLACEHOLDER: string;
-  LAST_NAME_PLACEHOLDER: string;
-  ZIP_CODE_PLACEHOLDER: string;
-  CONTINUE_BUTTON_TEXT: string;
-  CANCEL_BUTTON_TEXT: string;
   FIRST_NAME_ERROR: string;
   LAST_NAME_ERROR: string;
   ZIP_CODE_ERROR: string;
@@ -129,13 +123,7 @@ export const EXPECTED_CART_CONSTANTS: CartPageExpectedConstants = {
 
 // --- CHECKOUT PAGE EXPECTED CONSTANTS ---
 export const EXPECTED_CHECKOUT_CONSTANTS: CheckoutPageExpectedConstants = {
-  TITLE: "Checkout: Your Information",
   PAGE_URL: EXPECTED_URL_PATHS.CHECKOUT_PAGE_STEP_1,
-  FIRST_NAME_PLACEHOLDER: "First Name",
-  LAST_NAME_PLACEHOLDER: "Last Name",
-  ZIP_CODE_PLACEHOLDER: "Zip/Postal Code",
-  CONTINUE_BUTTON_TEXT: "Continue",
-  CANCEL_BUTTON_TEXT: "Cancel",
   FIRST_NAME_ERROR: "Error: First Name is required",
   LAST_NAME_ERROR: "Error: Last Name is required",
   ZIP_CODE_ERROR: "Error: Postal Code is required",

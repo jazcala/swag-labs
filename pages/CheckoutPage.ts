@@ -6,6 +6,7 @@ import { BasePage } from './BasePage';
  * It encapsulates the locators and actions related to the checkout functionality.
  */
 export class CheckoutPage extends BasePage {
+  readonly title: Locator;
   readonly firstNameInput: Locator;
   readonly lastNameInput: Locator;
   readonly postalCodeInput: Locator;
@@ -14,11 +15,12 @@ export class CheckoutPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.firstNameInput = page.locator('[data-test="firstName"]');
-    this.lastNameInput = page.locator('[data-test="lastName"]');
-    this.postalCodeInput = page.locator('[data-test="postalCode"]');
-    this.continueButton = page.locator('[data-test=continue]');
-    this.cancelButton = page.locator('[data-test=cancel]');
+    this.title = page.getByText('Checkout: Your Information');
+    this.firstNameInput = page.getByPlaceholder('First Name');
+    this.lastNameInput = page.getByPlaceholder('Last Name');
+    this.postalCodeInput = page.getByPlaceholder('Zip/Postal Code');
+    this.continueButton = page.getByRole('button', { name: 'Continue' });
+    this.cancelButton = page.getByRole('button', { name: 'Cancel' });
   }
 
   async fillCheckoutForm(firstName: string, lastName: string, postalCode: string): Promise<void> {
@@ -30,4 +32,14 @@ export class CheckoutPage extends BasePage {
   async continueToOverview(): Promise<void> {
     await this.continueButton.click();
   }
+
+  async cancelCheckout(): Promise<void> {
+    await this.cancelButton.click();
+  }
+
+  async fillFormAndContinue(firstName: string, lastName: string, postalCode: string): Promise<void> {
+    await this.fillCheckoutForm(firstName, lastName, postalCode);
+    await this.continueToOverview();
+  }
+
 }
