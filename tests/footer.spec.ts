@@ -31,12 +31,12 @@ test.describe("Footer Functionality Tests", () => {
       if (pagePath.path === EXPECTED_URL_PATHS.CART_PAGE) {
         // Must add an item to reach cart page
         const productsPage = new ProductsPage(page);
-        await productsPage.addFirstProductToCart();
+        await productsPage.addToCart();
         await productsPage.viewCart();
       } else if (pagePath.path.includes('checkout')) {
         // Must complete previous steps to reach checkout pages
         const productsPage = new ProductsPage(page);
-        await productsPage.addFirstProductToCart();
+        await productsPage.addToCart();
         await productsPage.viewCart();
         const cartPage = new CartPage(page);
         await cartPage.proceedToCheckout();

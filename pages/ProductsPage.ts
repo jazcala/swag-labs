@@ -42,8 +42,13 @@ export class ProductsPage extends BasePage {
     await (await this.getProductContainer()).locator(this.removeButton).click();
   }
 
-  async addFirstProductToCart(): Promise<void> {
-    await (await this.getProductContainer()).locator(this.addToCartButton).click();
+
+  /**
+    * Add a product to the cart. If productName is not provided, adds the first  product.
+    * @param productName
+   */
+  async addToCart(productName?: string): Promise<void> {
+    await (await this.getProductContainer(productName)).locator(this.addToCartButton).click();
   }
 
   async getFirstProductName(): Promise<string> {

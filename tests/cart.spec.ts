@@ -9,7 +9,7 @@ test.describe("Cart Page with one product Tests", () => {
   test.beforeEach(async ({ page }) => {
     await loginAsStandardUser(page);
     const productsPage = new ProductsPage(page);
-    await productsPage.addFirstProductToCart();
+    await productsPage.addToCart();
     await productsPage.viewCart();
     await expect(page).toHaveURL(EXPECTED_CART_CONSTANTS.PAGE_URL);
   });

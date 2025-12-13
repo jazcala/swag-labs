@@ -12,7 +12,7 @@ test.describe("Checkout Page Tests", () => {
   test.beforeEach(async ({ page }) => {
     await loginAsStandardUser(page);
     const productsPage = new ProductsPage(page);
-    await productsPage.addFirstProductToCart();
+    await productsPage.addToCart();
     await productsPage.viewCart();
     const cartPage = new CartPage(page);
     await cartPage.proceedToCheckout();

@@ -43,7 +43,7 @@ test.describe("Products Tests", () => {
   test("should add first product to the cart and update badge", async ({ page }) => {
     const productPage = new ProductsPage(page);
     await expect(productPage.products.first()).toBeVisible();
-    await productPage.addFirstProductToCart();
+    await productPage.addToCart();
     expect(await productPage.getCartItemCount()).toBe(1);
     const firstProductContainer = await productPage.getProductContainer();
     expect(firstProductContainer.locator(productPage.removeButton)).toBeVisible();
@@ -53,7 +53,7 @@ test.describe("Products Tests", () => {
   test("should remove first product from the cart and clean badge", async ({ page }) => {
     const productPage = new ProductsPage(page);
     await expect(productPage.products.first()).toBeVisible();
-    await productPage.addFirstProductToCart();
+    await productPage.addToCart();
     expect(await productPage.getCartItemCount()).toBe(1);
     await productPage.removeFirstProduct();
     expect(await productPage.getCartItemCount()).toBe(0);

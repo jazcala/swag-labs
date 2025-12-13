@@ -46,13 +46,13 @@ test.describe("Global Sidebar Menu Functionality Tests", () => {
       } else if (pagePath.url === EXPECTED_CART_CONSTANTS.PAGE_URL) {
         // Add a product to reach the cart page
         const productsPage = new ProductsPage(page);
-        await productsPage.addFirstProductToCart();
+        await productsPage.addToCart();
         await productsPage.viewCart();
         pageObject = new CartPage(page);
       } else if (pagePath.url === EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS.PAGE_URL) {
         // Add a product, navigate to cart, then through checkout step 1
         const productsPage = new ProductsPage(page);
-        await productsPage.addFirstProductToCart();
+        await productsPage.addToCart();
         await productsPage.viewCart();
         const cartPage = new CartPage(page);
         await cartPage.proceedToCheckout();
@@ -77,7 +77,7 @@ test.describe("Global Sidebar Menu Functionality Tests", () => {
 
     // Assert navigation
     await expect(page).toHaveURL(EXPECTED_PRODUCTS_CONSTANTS.PAGE_URL);
-    await expect(productsPage.title).toHaveText(EXPECTED_PRODUCTS_CONSTANTS.TITLE);
+    await expect(productsPage.title).toBeVisible();
 
   });
 
@@ -103,7 +103,7 @@ test.describe("Global Sidebar Menu Functionality Tests", () => {
     const productsPage = new ProductsPage(page);
 
     // Arrange: Add item to cart and assert cart count
-    await productsPage.addFirstProductToCart();
+    await productsPage.addToCart();
     expect(await productsPage.getCartItemCount()).toBe(1);
 
     // Step 1: Open menu

@@ -14,7 +14,7 @@ test.describe("Checkout Overview Tests", () => {
     await loginAsStandardUser(page);
     // Add product to the cart,
     const productsPage = new ProductsPage(page);
-    await productsPage.addFirstProductToCart();
+    await productsPage.addToCart();
     //  view cart
     await productsPage.viewCart();
     // navigate to the checkout overview page
