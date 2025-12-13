@@ -8,6 +8,7 @@
 export interface PAGE_URL_PATHS {
   LOGIN_PAGE: string;
   PRODUCTS_PAGE: string;
+  PRODUCT_DETAILS_PAGE?: string;
   CART_PAGE: string;
   CHECKOUT_PAGE_STEP_1: string;
   CHECKOUT_PAGE_STEP_2: string;
@@ -41,11 +42,8 @@ export interface LoginPageExpectedConstants {
 }
 
 export interface ProductsPageExpectedConstants {
-  TITLE: string;
   PRODUCTS_COUNT: number;
   PAGE_URL: string;
-  REMOVE_BUTTON_TEXT: string;
-  ADD_TO_CART_BUTTON_TEXT: string;
 }
 
 export interface CartPageExpectedConstants {
@@ -92,6 +90,7 @@ interface CheckoutCompletePageExpectedConstants {
 export const EXPECTED_URL_PATHS: PAGE_URL_PATHS = {
   LOGIN_PAGE: '/',
   PRODUCTS_PAGE: '/inventory.html',
+  PRODUCT_DETAILS_PAGE: '/inventory-item.html',
   CART_PAGE: '/cart.html',
   CHECKOUT_PAGE_STEP_1: '/checkout-step-one.html',
   CHECKOUT_PAGE_STEP_2: '/checkout-step-two.html',
@@ -118,11 +117,8 @@ export const EXPECTED_LOGIN_CONSTANTS = {
 
 // --- PRODUCTS PAGE EXPECTED CONSTANTS ---
 export const EXPECTED_PRODUCTS_CONSTANTS: ProductsPageExpectedConstants = {
-  TITLE: "Products",
   PRODUCTS_COUNT: 6,
   PAGE_URL: EXPECTED_URL_PATHS.PRODUCTS_PAGE,
-  REMOVE_BUTTON_TEXT: "Remove",
-  ADD_TO_CART_BUTTON_TEXT: "Add to cart",
 };
 
 // --- CART PAGE EXPECTED CONSTANTS ---
