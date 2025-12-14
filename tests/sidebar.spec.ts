@@ -3,14 +3,14 @@ import { loginAsStandardUser, fillFormAndContinue } from "../utils/testFlows";
 import { ProductsPage } from "../pages/ProductsPage";
 import { CartPage } from "../pages/CartPage";
 import { CheckoutOverviewPage } from "../pages/CheckoutOverviewPage";
-import { EXPECTED_PRODUCTS_CONSTANTS, EXPECTED_CART_CONSTANTS, EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS, EXPECTED_LOGIN_CONSTANTS } from "../utils/testConstants";
+import { EXPECTED_URL_PATHS } from "../utils/testConstants";
 import { LoginPage } from "../pages/LoginPage";
 
 // Define an array of URLs to test the sidebar on
 const authenticatedPages = [
-  { name: 'Products Page', url: EXPECTED_PRODUCTS_CONSTANTS.PAGE_URL },
-  { name: 'Cart Page', url: EXPECTED_CART_CONSTANTS.PAGE_URL },
-  { name: 'Checkout Overview Page', url: EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS.PAGE_URL }
+  { name: 'Products Page', url: EXPECTED_URL_PATHS.PRODUCTS_PAGE },
+  { name: 'Cart Page', url: EXPECTED_URL_PATHS.CART_PAGE },
+  { name: 'Checkout Overview Page', url: EXPECTED_URL_PATHS.CHECKOUT_PAGE_STEP_1 }
 ];
 
 test.describe("Global Sidebar Menu Functionality Tests", () => {
@@ -40,16 +40,16 @@ test.describe("Global Sidebar Menu Functionality Tests", () => {
       let pageObject: ProductsPage | CartPage | CheckoutOverviewPage;
 
       // Navigate to the specific page
-      if (pagePath.url === EXPECTED_PRODUCTS_CONSTANTS.PAGE_URL) {
+      if (pagePath.url === EXPECTED_URL_PATHS.PRODUCTS_PAGE) {
         // Already on products page after login, no need to navigate
         pageObject = new ProductsPage(page);
-      } else if (pagePath.url === EXPECTED_CART_CONSTANTS.PAGE_URL) {
+      } else if (pagePath.url === EXPECTED_URL_PATHS.CART_PAGE) {
         // Add a product to reach the cart page
         const productsPage = new ProductsPage(page);
         await productsPage.addToCart();
         await productsPage.viewCart();
         pageObject = new CartPage(page);
-      } else if (pagePath.url === EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS.PAGE_URL) {
+      } else if (pagePath.url === EXPECTED_URL_PATHS.CHECKOUT_PAGE_STEP_1) {
         // Add a product, navigate to cart, then through checkout step 1
         const productsPage = new ProductsPage(page);
         await productsPage.addToCart();
@@ -76,7 +76,7 @@ test.describe("Global Sidebar Menu Functionality Tests", () => {
     await productsPage.allItemsLink.click();
 
     // Assert navigation
-    await expect(page).toHaveURL(EXPECTED_PRODUCTS_CONSTANTS.PAGE_URL);
+    await expect(page).toHaveURL(EXPECTED_URL_PATHS.PRODUCTS_PAGE);
     await expect(productsPage.title).toBeVisible();
 
   });
@@ -91,7 +91,7 @@ test.describe("Global Sidebar Menu Functionality Tests", () => {
     await productsPage.clickLogout();
 
     // Assert navigation back to login page
-    await expect(page).toHaveURL(EXPECTED_LOGIN_CONSTANTS.PAGE_URL);
+    await expect(page).toHaveURL(EXPECTED_URL_PATHS.LOGIN_PAGE);
 
     // Assert clean state
     const loginPage = new LoginPage(page);

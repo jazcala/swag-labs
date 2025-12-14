@@ -7,7 +7,6 @@ import { Page, Locator } from '@playwright/test';
 export class BasePage {
   readonly page: Page;
   readonly siteTitle: Locator;
-  readonly title: Locator;
   readonly errorMessage: Locator;
   //--- Global Cart Elements ---
   readonly cartButton: Locator;
@@ -32,20 +31,18 @@ export class BasePage {
   constructor(page: Page) {
     this.page = page;
     this.siteTitle = page.getByText('Swag Labs');
-    // TODO REMOVE TITLE AFTER EACH PAGE HAS IT OWN TITLE LOCATOR
-    this.title = page.locator('[data-test="title"]');
     // --- Global Error Message Element Inicialization ---
     this.errorMessage = page.locator('[data-test="error"]');
     // --- Globar Cart Elements Inicialization ---
     this.cartButton = page.locator('[data-test="shopping-cart-link"]');
     this.cartQuantity = page.locator('[data-test="shopping-cart-badge"]');
     // --- Global Sidebar Elements Inicialization ---
-    this.sidebarMenuButton = page.locator('#react-burger-menu-btn');
-    this.allItemsLink = page.locator('#inventory_sidebar_link');
-    this.aboutLink = page.locator('#about_sidebar_link');
-    this.logoutLink = page.locator('#logout_sidebar_link');
-    this.resetAppStateLink = page.locator('#reset_sidebar_link');
-    this.closeSidebarButton = page.locator('#react-burger-cross-btn');
+    this.sidebarMenuButton = page.getByRole('button', { name: 'Open Menu' });
+    this.allItemsLink = page.getByRole('link', { name: 'All Items' });
+    this.aboutLink = page.getByRole('link', { name: 'About' });
+    this.logoutLink = page.getByRole('link', { name: 'Logout' });
+    this.resetAppStateLink = page.getByRole('link', { name: 'Reset App State' });
+    this.closeSidebarButton = page.getByRole('button', { name: 'Close Menu' });
     // --- Global Footer Elements Inicialization ---
     this.footerContainer = page.locator('[data-test="footer"]');
     this.twitterLink = page.locator('[data-test="social-twitter"]');
