@@ -3,6 +3,7 @@ import { fillFormAndContinue, loginAsStandardUser } from "../utils/testFlows";
 import { BasePage } from "../pages/BasePage";
 import { ProductsPage } from "../pages/ProductsPage";
 import { CartPage } from "../pages/CartPage";
+import { CheckoutOverviewPage } from "../pages/CheckoutOverviewPage";
 import { EXPECTED_URL_PATHS, EXPECTED_SOCIAL_LINKS } from "../utils/testConstants";
 
 // Define pages where the footer is expected to be visible
@@ -48,7 +49,8 @@ test.describe("Footer Functionality Tests", () => {
 
         // If targeting complete page, finish checkout
         if (pagePath.path === EXPECTED_URL_PATHS.CHECKOUT_COMPLETE) {
-          await page.click('[data-test="finish"]');
+          const checkoutOverviewPage = new CheckoutOverviewPage(page);
+          await checkoutOverviewPage.completeCheckout();
         }
       }
 

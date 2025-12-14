@@ -32,10 +32,10 @@ export class BasePage {
     this.page = page;
     this.siteTitle = page.getByText('Swag Labs');
     // --- Global Error Message Element Inicialization ---
-    this.errorMessage = page.locator('[data-test="error"]');
+    this.errorMessage = page.getByTestId('error');
     // --- Globar Cart Elements Inicialization ---
-    this.cartButton = page.locator('[data-test="shopping-cart-link"]');
-    this.cartQuantity = page.locator('[data-test="shopping-cart-badge"]');
+    this.cartButton = page.getByTestId('shopping-cart-link');
+    this.cartQuantity = page.getByTestId('shopping-cart-badge');
     // --- Global Sidebar Elements Inicialization ---
     this.sidebarMenuButton = page.getByRole('button', { name: 'Open Menu' });
     this.allItemsLink = page.getByRole('link', { name: 'All Items' });
@@ -44,11 +44,11 @@ export class BasePage {
     this.resetAppStateLink = page.getByRole('link', { name: 'Reset App State' });
     this.closeSidebarButton = page.getByRole('button', { name: 'Close Menu' });
     // --- Global Footer Elements Inicialization ---
-    this.footerContainer = page.locator('[data-test="footer"]');
-    this.twitterLink = page.locator('[data-test="social-twitter"]');
-    this.facebookLink = page.locator('[data-test="social-facebook"]');
-    this.linkedinLink = page.locator('[data-test="social-linkedin"]');
-    this.copyrightText = page.locator('[data-test="footer-copy"]');
+    this.footerContainer = page.getByTestId('footer');
+    this.twitterLink = page.getByRole('link', { name: 'Twitter' });
+    this.facebookLink = page.getByRole('link', { name: 'Facebook' });
+    this.linkedinLink = page.getByRole('link', { name: 'LinkedIn' });
+    this.copyrightText = page.getByTestId('footer-copy');
   }
 
   /**
