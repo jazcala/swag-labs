@@ -45,4 +45,7 @@ export class CheckoutOverviewPage extends BasePage {
     await this.finishButton.click();
   }
 
+  async cancelCheckout(): Promise<void> {
+    await this.cancelButton.click();
+  }
 }

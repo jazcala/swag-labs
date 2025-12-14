@@ -5,7 +5,7 @@ import { CheckoutOverviewPage } from "../pages/CheckoutOverviewPage";
 import { CheckoutCompletePage } from "../pages/CheckoutCompletePage";
 import { loginAsStandardUser, fillFormAndContinue } from "../utils/testFlows";
 import { ALL_PRODUCTS, TestProductShape } from "../utils/testData";
-import { EXPECTED_CHECKOUT_CONSTANTS, EXPECTED_CHECKOUT_COMPLETE_CONSTANTS, EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS, EXPECTED_PRODUCTS_CONSTANTS } from "../utils/testConstants";
+import { EXPECTED_CHECKOUT_CONSTANTS, EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS, EXPECTED_PRODUCTS_CONSTANTS, EXPECTED_URL_PATHS } from "../utils/testConstants";
 
 /**
  * E2E (End-to-End) test suite using Data-Driven Testing (DDT) to validate the
@@ -50,19 +50,19 @@ test.describe("E2E Purchase Flows", () => {
         await expect(overviewPage.itemTotalValue).toHaveText(`Total: $${expectedFinalTotal}`);
 
         // Step 7. Finalize
-        await overviewPage.finishButton.click();
+        await overviewPage.completeCheckout();
 
         // Step 8. Confirmation (URL and Message Check)
-        await expect(page).toHaveURL(EXPECTED_CHECKOUT_COMPLETE_CONSTANTS.PAGE_URL);
+        await expect(page).toHaveURL(EXPECTED_URL_PATHS.CHECKOUT_COMPLETE);
 
         const checkoutCompletePage = new CheckoutCompletePage(page);
-        await expect(checkoutCompletePage.messageTitle).toHaveText(EXPECTED_CHECKOUT_COMPLETE_CONSTANTS.MESSAGE_TITLE);
-        await expect(checkoutCompletePage.messageDescription).toHaveText(EXPECTED_CHECKOUT_COMPLETE_CONSTANTS.MESSAGE_DESCRIPTION);
+        await expect(checkoutCompletePage.messageTitle).toBeVisible();
+        await expect(checkoutCompletePage.messageDescription).toBeVisible();
 
         // Step 9. Return to Home
 
         await expect(checkoutCompletePage.backHomeButton).toBeVisible();
-        await checkoutCompletePage.backHomeButton.click();
+        await checkoutCompletePage.navigateBackHome();
 
         // Final navigation assertion
         await expect(page).toHaveURL(EXPECTED_PRODUCTS_CONSTANTS.PAGE_URL);
@@ -97,7 +97,7 @@ test.describe("E2E Purchase Flows", () => {
       // Steps 3 & 4. Cart Navigation & Start Checkout
       await productsPage.viewCart();
       const cartPage = new CartPage(page);
-      await cartPage.checkoutButton.click();
+      await cartPage.proceedToCheckout();
       await expect(page).toHaveURL(EXPECTED_CHECKOUT_CONSTANTS.PAGE_URL);
 
       // Step 5. Fill Form
@@ -113,17 +113,17 @@ test.describe("E2E Purchase Flows", () => {
       await expect(overviewPage.itemTotalValue).toHaveText(`Total: $${expectedFinalTotal}`);
 
       // Step 7. Finalize
-      await overviewPage.finishButton.click();
+      await overviewPage.completeCheckout();
 
       // Step 8. Confirmation (URL and Message Check)
-      await expect(page).toHaveURL(EXPECTED_CHECKOUT_COMPLETE_CONSTANTS.PAGE_URL);
+      await expect(page).toHaveURL(EXPECTED_URL_PATHS.CHECKOUT_COMPLETE);
       const checkoutCompletePage = new CheckoutCompletePage(page);
-      await expect(checkoutCompletePage.messageTitle).toHaveText(EXPECTED_CHECKOUT_COMPLETE_CONSTANTS.MESSAGE_TITLE);
-      await expect(checkoutCompletePage.messageDescription).toHaveText(EXPECTED_CHECKOUT_COMPLETE_CONSTANTS.MESSAGE_DESCRIPTION);
+      await expect(checkoutCompletePage.messageTitle).toBeVisible();
+      await expect(checkoutCompletePage.messageDescription).toBeVisible();
 
       // Step 9. Return to Home
       expect(checkoutCompletePage.backHomeButton).toBeVisible();
-      await checkoutCompletePage.backHomeButton.click();
+      await checkoutCompletePage.navigateBackHome();
       await expect(page).toHaveURL(EXPECTED_PRODUCTS_CONSTANTS.PAGE_URL);
 
     });

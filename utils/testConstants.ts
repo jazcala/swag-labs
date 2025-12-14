@@ -65,14 +65,6 @@ interface CheckoutOverviewPageExpectedConstants {
   TOTAL_LABEL: string;
 }
 
-interface CheckoutCompletePageExpectedConstants {
-  TITLE: string;
-  PAGE_URL: string;
-  MESSAGE_TITLE: string;
-  MESSAGE_DESCRIPTION: string;
-  BACK_TO_HOME_BUTTON_TEXT: string;
-}
-
 // -- CONSTANTS OBJECTS --
 //-- URL PATHS ---
 export const EXPECTED_URL_PATHS: PAGE_URL_PATHS = {
@@ -129,15 +121,6 @@ export const EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS: CheckoutOverviewPageExpectedC
   SUBTOTAL_LABEL: "Item total: $",
   TAX_LABEL: "Tax: $",
   TOTAL_LABEL: "Total: $"
-};
-
-// --- CHECKOUT COMPLETE PAGE EXPECTED CONSTANTS ---
-export const EXPECTED_CHECKOUT_COMPLETE_CONSTANTS: CheckoutCompletePageExpectedConstants = {
-  TITLE: "Checkout: Complete!",
-  PAGE_URL: EXPECTED_URL_PATHS.CHECKOUT_COMPLETE,
-  MESSAGE_TITLE: "Thank you for your order!",
-  MESSAGE_DESCRIPTION: "Your order has been dispatched, and will arrive just as fast as the pony can get there!",
-  BACK_TO_HOME_BUTTON_TEXT: "Back Home",
 };
 
 export const EXPECTED_SOCIAL_LINKS: SocialLink[] = [

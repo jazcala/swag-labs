@@ -19,7 +19,6 @@ async function login(page: Page, username: string, password: string): Promise<Lo
   await loginPage.goto(EXPECTED_LOGIN_CONSTANTS.PAGE_URL);
   await loginPage.login(username, password);
   return loginPage;
-
 }
 
 /** --- LOGIN FLOWS ---
@@ -41,7 +40,7 @@ export async function loginAsLockedOutUser(page: Page): Promise<LoginPage> {
  */
 export async function setupForCheckoutFormTest(
   page: Page,
-  productName: string,
+  productName?: string,
 ) {
   await loginAsStandardUser(page);
   const productsPage = new ProductsPage(page);
@@ -69,19 +68,16 @@ export async function fillFormAndContinue(page: Page): Promise<void> {
 }
 
 /**
- * --- FULL PURCHASE SCENARIO ---
- * Logs in, adds a specified product, and completes the full checkout flow.
- * This function demonstrates the ideal use of a helper: orchestrating multiple pages.
+ * --- FULL PURCHASE SCENARIO SETUP ---
+ * Completes the full flow up to the Checkout Complete page.
+ * Used as a setup helper for tests validating the completion screen.
  * @param page The Playwright Page object instance.
- * @param productName The name of the product to purchase.
+ * @param productName? The name of the product to purchase is optional. If it's not privided use first option.
  */
-export async function purchaseProductFlow(page: Page, productName: string): Promise<void> {
+export async function setupForCheckoutCompleteTest(page: Page, productName?: string): Promise<void> {
   await loginAsStandardUser(page);
-  const productsPage = new ProductsPage(page);
-  const cartPage = new CartPage(page);
+  await setupForCheckoutFormTest(page, productName);
   const checkoutOverviewPage = new CheckoutOverviewPage(page);
-  await productsPage.addToCart(productName);
-  await cartPage.proceedToCheckout();
   await fillFormAndContinue(page);
   await checkoutOverviewPage.completeCheckout();
 }

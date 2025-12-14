@@ -7,15 +7,21 @@ import { BasePage } from './BasePage';
  */
 
 export class CheckoutCompletePage extends BasePage {
+  readonly title: Locator;
   readonly messageTitle: Locator;
   readonly messageDescription: Locator;
   readonly backHomeButton: Locator;
 
   constructor(page: Page) {
     super(page);
-    this.messageTitle = page.locator('[data-test="complete-header"]');
-    this.messageDescription = page.locator('[data-test="complete-text"]');
-    this.backHomeButton = page.locator('[data-test="back-to-products"]');
+    this.title = page.getByText('Checkout: Complete!');
+    this.messageTitle = page.getByText('Thank you for your order!');
+    this.messageDescription = page.getByText('Your order has been dispatched, and will arrive just as fast as the pony can get there!');
+    this.backHomeButton = page.getByRole('button', { name: 'Back Home' });
+  }
+
+  async navigateBackHome(): Promise<void> {
+    await this.backHomeButton.click();
   }
 
 }
