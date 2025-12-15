@@ -22,7 +22,7 @@ test.describe("Smoke Test Suite", () => {
 
     // Step 3: Assert key product page elements are visible
     const productsPage = new ProductsPage(page);
-    await expect(productsPage.title).toHaveText(EXPECTED_PRODUCTS_CONSTANTS.TITLE);
+    await expect(productsPage.title).toBeVisible();
     await expect(productsPage.cartButton).toBeVisible();
 
   });

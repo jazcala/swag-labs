@@ -6,6 +6,7 @@ import { BasePage } from './BasePage';
  * It encapsulates the locators and actions related to the checkout overview functionality.
  */
 export class CheckoutOverviewPage extends BasePage {
+  readonly title: Locator;
   readonly finishButton: Locator;
   readonly cancelButton: Locator;
   readonly paymentInfoTitle: Locator;
@@ -23,24 +24,28 @@ export class CheckoutOverviewPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.finishButton = page.locator('[data-test="finish"]');
-    this.cancelButton = page.locator('[data-test="cancel"]');
-    this.paymentInfoTitle = page.locator('[data-test="payment-info-label"]');
-    this.paymentInfoValue = page.locator('[data-test="payment-info-value"]');
-    this.shippingInfoTitle = page.locator('[data-test="shipping-info-label"]');
-    this.shippingInfoValue = page.locator('[data-test="shipping-info-value"]');
-    this.totalTitle = page.locator('[data-test="total-info-label"]');
-    this.itemTotalValue = page.locator('[data-test="total-label"]');
-    this.itemSubTotalValue = page.locator('[data-test="subtotal-label"]');
-    this.itemTaxValue = page.locator('[data-test="tax-label"]');
-    this.itemQuantity = page.locator('[data-test="item-quantity"]');
-    this.itemName = page.locator('[data-test="inventory-item-name"]');
-    this.itemPrice = page.locator('[data-test="inventory-item-price"]');
-    this.itemDescription = page.locator('[data-test="inventory-item-desc"]');
+    this.title = page.getByText('Checkout: Overview')
+    this.finishButton = page.getByRole('button', { name: 'Finish' });
+    this.cancelButton = page.getByRole('button', { name: 'Cancel' });
+    this.paymentInfoTitle = page.getByText('Payment Information:');
+    this.paymentInfoValue = page.getByTestId('payment-info-value');
+    this.shippingInfoTitle = page.getByText('Shipping Information:');
+    this.shippingInfoValue = page.getByTestId('shipping-info-value');
+    this.totalTitle = page.getByText('Price Total');
+    this.itemTotalValue = page.getByTestId('total-label');
+    this.itemSubTotalValue = page.getByTestId('subtotal-label');
+    this.itemTaxValue = page.getByTestId('tax-label');
+    this.itemQuantity = page.getByTestId('item-quantity');
+    this.itemName = page.getByTestId('inventory-item-name');
+    this.itemPrice = page.getByTestId('inventory-item-price');
+    this.itemDescription = page.getByTestId('inventory-item-desc');
   }
 
   async completeCheckout(): Promise<void> {
     await this.finishButton.click();
   }
 
+  async cancelCheckout(): Promise<void> {
+    await this.cancelButton.click();
+  }
 }

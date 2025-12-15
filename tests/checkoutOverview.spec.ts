@@ -5,7 +5,7 @@ import { TEST_PRODUCT_DATA, TEST_CHECKOUT_DATA } from "../utils/testData";
 import { fillFormAndContinue } from "../utils/testFlows";
 import { ProductsPage } from "../pages/ProductsPage";
 import { CartPage } from "../pages/CartPage";
-import { EXPECTED_CHECKOUT_COMPLETE_CONSTANTS, EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS, EXPECTED_PRODUCTS_CONSTANTS } from "../utils/testConstants";
+import { EXPECTED_URL_PATHS, EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS, EXPECTED_PRODUCTS_CONSTANTS } from "../utils/testConstants";
 
 
 test.describe("Checkout Overview Tests", () => {
@@ -28,7 +28,7 @@ test.describe("Checkout Overview Tests", () => {
 
   test("should display the correct title on checkout overview page", async ({ page }) => {
     const checkoutOverviewPage = new CheckoutOverviewPage(page);
-    await expect(checkoutOverviewPage.title).toHaveText(EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS.TITLE);
+    await expect(checkoutOverviewPage.title).toBeVisible();
   });
 
   test("should have correct item list in the overview", async ({ page }) => {
@@ -46,21 +46,18 @@ test.describe("Checkout Overview Tests", () => {
   test("should have Payment Information section", async ({ page }) => {
     const checkoutOverviewPage = new CheckoutOverviewPage(page);
     await expect(checkoutOverviewPage.paymentInfoTitle).toBeVisible();
-    await expect(checkoutOverviewPage.paymentInfoTitle).toHaveText(EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS.PAYMENT_INFO_TITLE);
     await expect(checkoutOverviewPage.paymentInfoValue).toHaveText(TEST_CHECKOUT_DATA.card);
   });
 
   test("should have Shipping Information section", async ({ page }) => {
     const checkoutOverviewPage = new CheckoutOverviewPage(page);
     await expect(checkoutOverviewPage.shippingInfoTitle).toBeVisible();
-    await expect(checkoutOverviewPage.shippingInfoTitle).toHaveText(EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS.SHIPPING_INFO_TITLE);
     await expect(checkoutOverviewPage.shippingInfoValue).toHaveText(TEST_CHECKOUT_DATA.shipping);
   });
 
   test("should have Price Total section", async ({ page }) => {
     const checkoutOverviewPage = new CheckoutOverviewPage(page);
     await expect(checkoutOverviewPage.totalTitle).toBeVisible();
-    await expect(checkoutOverviewPage.totalTitle).toHaveText(EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS.TOTAL_TITLE);
     await expect(checkoutOverviewPage.itemSubTotalValue).toBeVisible();
     await expect(checkoutOverviewPage.itemSubTotalValue).toHaveText(`${EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS.SUBTOTAL_LABEL}${TEST_PRODUCT_DATA.price}`);
     await expect(checkoutOverviewPage.itemTaxValue).toBeVisible();
@@ -73,20 +70,18 @@ test.describe("Checkout Overview Tests", () => {
   test("should have Finish and Cancel buttons", async ({ page }) => {
     const checkoutOverviewPage = new CheckoutOverviewPage(page);
     expect(checkoutOverviewPage.finishButton).toBeVisible();
-    expect(checkoutOverviewPage.finishButton).toHaveText(EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS.FINISH_BUTTON_TEXT);
     expect(checkoutOverviewPage.cancelButton).toBeVisible();
-    expect(checkoutOverviewPage.cancelButton).toHaveText(EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS.CANCEL_BUTTON_TEXT);
   });
 
   test("should navigate to the Finish page when Finish button is clicked", async ({ page }) => {
     const checkoutOverviewPage = new CheckoutOverviewPage(page);
-    await checkoutOverviewPage.finishButton.click();
-    await expect(page).toHaveURL(EXPECTED_CHECKOUT_COMPLETE_CONSTANTS.PAGE_URL);
+    await checkoutOverviewPage.completeCheckout();
+    await expect(page).toHaveURL(EXPECTED_URL_PATHS.CHECKOUT_COMPLETE);
   });
 
   test("should navigate back to the cart when Cancel button is clicked", async ({ page }) => {
     const checkoutOverviewPage = new CheckoutOverviewPage(page);
-    await checkoutOverviewPage.cancelButton.click();
+    await checkoutOverviewPage.cancelCheckout();
     await expect(page).toHaveURL(EXPECTED_PRODUCTS_CONSTANTS.PAGE_URL);;
   });
 });

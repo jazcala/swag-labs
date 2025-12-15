@@ -8,6 +8,7 @@
 export interface PAGE_URL_PATHS {
   LOGIN_PAGE: string;
   PRODUCTS_PAGE: string;
+  PRODUCT_DETAILS_PAGE?: string;
   CART_PAGE: string;
   CHECKOUT_PAGE_STEP_1: string;
   CHECKOUT_PAGE_STEP_2: string;
@@ -41,55 +42,27 @@ export interface LoginPageExpectedConstants {
 }
 
 export interface ProductsPageExpectedConstants {
-  TITLE: string;
   PRODUCTS_COUNT: number;
   PAGE_URL: string;
-  REMOVE_BUTTON_TEXT: string;
-  ADD_TO_CART_BUTTON_TEXT: string;
 }
 
 export interface CartPageExpectedConstants {
-  TITLE: string;
   PAGE_URL: string;
   EMPTY_CART_MESSAGE: string;
-  QTY_LABEL: string;
-  DESCRIPTION_LABEL: string;
-  CHECKOUT_BUTTON_TEXT: string;
-  CONTINUE_SHOPPING_BUTTON_TEXT: string;
 }
 
 interface CheckoutPageExpectedConstants {
-  TITLE: string;
   PAGE_URL: string;
-  FIRST_NAME_PLACEHOLDER: string;
-  LAST_NAME_PLACEHOLDER: string;
-  ZIP_CODE_PLACEHOLDER: string;
-  CONTINUE_BUTTON_TEXT: string;
-  CANCEL_BUTTON_TEXT: string;
   FIRST_NAME_ERROR: string;
   LAST_NAME_ERROR: string;
   ZIP_CODE_ERROR: string;
 }
 
 interface CheckoutOverviewPageExpectedConstants {
-  TITLE: string;
   PAGE_URL: string;
-  PAYMENT_INFO_TITLE: string;
-  SHIPPING_INFO_TITLE: string;
-  TOTAL_TITLE: string;
-  FINISH_BUTTON_TEXT: string;
-  CANCEL_BUTTON_TEXT: string;
   SUBTOTAL_LABEL: string;
   TAX_LABEL: string;
   TOTAL_LABEL: string;
-}
-
-interface CheckoutCompletePageExpectedConstants {
-  TITLE: string;
-  PAGE_URL: string;
-  MESSAGE_TITLE: string;
-  MESSAGE_DESCRIPTION: string;
-  BACK_TO_HOME_BUTTON_TEXT: string;
 }
 
 // -- CONSTANTS OBJECTS --
@@ -97,6 +70,7 @@ interface CheckoutCompletePageExpectedConstants {
 export const EXPECTED_URL_PATHS: PAGE_URL_PATHS = {
   LOGIN_PAGE: '/',
   PRODUCTS_PAGE: '/inventory.html',
+  PRODUCT_DETAILS_PAGE: '/inventory-item.html',
   CART_PAGE: '/cart.html',
   CHECKOUT_PAGE_STEP_1: '/checkout-step-one.html',
   CHECKOUT_PAGE_STEP_2: '/checkout-step-two.html',
@@ -123,33 +97,19 @@ export const EXPECTED_LOGIN_CONSTANTS = {
 
 // --- PRODUCTS PAGE EXPECTED CONSTANTS ---
 export const EXPECTED_PRODUCTS_CONSTANTS: ProductsPageExpectedConstants = {
-  TITLE: "Products",
   PRODUCTS_COUNT: 6,
   PAGE_URL: EXPECTED_URL_PATHS.PRODUCTS_PAGE,
-  REMOVE_BUTTON_TEXT: "Remove",
-  ADD_TO_CART_BUTTON_TEXT: "Add to cart",
 };
 
 // --- CART PAGE EXPECTED CONSTANTS ---
 export const EXPECTED_CART_CONSTANTS: CartPageExpectedConstants = {
-  TITLE: "Your Cart",
   EMPTY_CART_MESSAGE: "Your cart is empty",
   PAGE_URL: EXPECTED_URL_PATHS.CART_PAGE,
-  QTY_LABEL: "QTY",
-  DESCRIPTION_LABEL: "Description",
-  CHECKOUT_BUTTON_TEXT: "Checkout",
-  CONTINUE_SHOPPING_BUTTON_TEXT: "Continue Shopping",
 };
 
 // --- CHECKOUT PAGE EXPECTED CONSTANTS ---
 export const EXPECTED_CHECKOUT_CONSTANTS: CheckoutPageExpectedConstants = {
-  TITLE: "Checkout: Your Information",
   PAGE_URL: EXPECTED_URL_PATHS.CHECKOUT_PAGE_STEP_1,
-  FIRST_NAME_PLACEHOLDER: "First Name",
-  LAST_NAME_PLACEHOLDER: "Last Name",
-  ZIP_CODE_PLACEHOLDER: "Zip/Postal Code",
-  CONTINUE_BUTTON_TEXT: "Continue",
-  CANCEL_BUTTON_TEXT: "Cancel",
   FIRST_NAME_ERROR: "Error: First Name is required",
   LAST_NAME_ERROR: "Error: Last Name is required",
   ZIP_CODE_ERROR: "Error: Postal Code is required",
@@ -157,25 +117,10 @@ export const EXPECTED_CHECKOUT_CONSTANTS: CheckoutPageExpectedConstants = {
 
 // --- CHECKOUT OVERVIEW PAGE EXPECTED CONSTANTS ---
 export const EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS: CheckoutOverviewPageExpectedConstants = {
-  TITLE: "Checkout: Overview",
   PAGE_URL: EXPECTED_URL_PATHS.CHECKOUT_PAGE_STEP_2,
-  PAYMENT_INFO_TITLE: "Payment Information:",
-  SHIPPING_INFO_TITLE: "Shipping Information:",
-  TOTAL_TITLE: "Price Total",
-  FINISH_BUTTON_TEXT: "Finish",
-  CANCEL_BUTTON_TEXT: "Cancel",
   SUBTOTAL_LABEL: "Item total: $",
   TAX_LABEL: "Tax: $",
   TOTAL_LABEL: "Total: $"
-};
-
-// --- CHECKOUT COMPLETE PAGE EXPECTED CONSTANTS ---
-export const EXPECTED_CHECKOUT_COMPLETE_CONSTANTS: CheckoutCompletePageExpectedConstants = {
-  TITLE: "Checkout: Complete!",
-  PAGE_URL: EXPECTED_URL_PATHS.CHECKOUT_COMPLETE,
-  MESSAGE_TITLE: "Thank you for your order!",
-  MESSAGE_DESCRIPTION: "Your order has been dispatched, and will arrive just as fast as the pony can get there!",
-  BACK_TO_HOME_BUTTON_TEXT: "Back Home",
 };
 
 export const EXPECTED_SOCIAL_LINKS: SocialLink[] = [

@@ -2,26 +2,25 @@ import { test, expect } from "@playwright/test";
 import { ProductsPage } from "../pages/ProductsPage";
 import { loginAsStandardUser } from "../utils/testFlows";
 import { TEST_PRODUCT_DATA } from "../utils/testData";
-import { EXPECTED_BASE_CONSTANTS, EXPECTED_CART_CONSTANTS, EXPECTED_PRODUCTS_CONSTANTS } from "../utils/testConstants";
+import { EXPECTED_CART_CONSTANTS, EXPECTED_PRODUCTS_CONSTANTS, EXPECTED_URL_PATHS } from "../utils/testConstants";
 
 test.describe("Products Tests", () => {
 
   test.beforeEach(async ({ page }) => {
     await loginAsStandardUser(page);
     await expect(page).toHaveURL(EXPECTED_PRODUCTS_CONSTANTS.PAGE_URL);
-  })
+  });
 
   // --- Structural Tests ---
 
   test("should have Swag Labs as logo", async ({ page }) => {
     const { siteTitle } = new ProductsPage(page);
     await expect(siteTitle).toBeVisible();
-    await expect(siteTitle).toHaveText(EXPECTED_BASE_CONSTANTS.SITE_TITLE);
   });
 
   test("should display the products page title", async ({ page }) => {
     const { title } = new ProductsPage(page);
-    await expect(title).toHaveText(EXPECTED_PRODUCTS_CONSTANTS.TITLE);
+    await expect(title).toBeVisible();
   });
 
   test("should display the correct number of products", async ({ page }) => {
@@ -34,7 +33,7 @@ test.describe("Products Tests", () => {
 
   test("should display product details when product name is clicked", async ({ page }) => {
     const { id, name } = TEST_PRODUCT_DATA;
-    const productUrl = `/inventory-item.html?id=${id}`;
+    const productUrl = `${EXPECTED_URL_PATHS.PRODUCT_DETAILS_PAGE}?id=${id}`;
     const productPage = new ProductsPage(page);
     await expect(productPage.products.first()).toBeVisible();
     await productPage.selectProduct(name);
@@ -44,34 +43,27 @@ test.describe("Products Tests", () => {
   test("should add first product to the cart and update badge", async ({ page }) => {
     const productPage = new ProductsPage(page);
     await expect(productPage.products.first()).toBeVisible();
-    await productPage.addFirstProductToCart();
-    const cartCount = await productPage.cartCount.textContent();
-    // verifies that the cart count is updated to "1"
-    expect(cartCount).toBe("1");
-    const removeButton = await productPage.getFirstProductRemoveButton();
-    // verifies that the button text has changed to "Remove"
-    expect(await removeButton.textContent()).toBe(EXPECTED_PRODUCTS_CONSTANTS.REMOVE_BUTTON_TEXT);
+    await productPage.addToCart();
+    expect(await productPage.getCartItemCount()).toBe(1);
+    const firstProductContainer = await productPage.getProductContainer();
+    expect(firstProductContainer.locator(productPage.removeButton)).toBeVisible();
+
   });
 
   test("should remove first product from the cart and clean badge", async ({ page }) => {
     const productPage = new ProductsPage(page);
     await expect(productPage.products.first()).toBeVisible();
-    await productPage.addFirstProductToCart();
-    const cartCount = await productPage.cartCount.textContent();
-    expect(cartCount).toBe("1");
-    const removeButton = await productPage.getFirstProductRemoveButton();
-    await removeButton.click();
-    const updatedCartCount = await productPage.cartCount.count();
-    // verifies that the cart count is updated to ""
-    expect(updatedCartCount).toBe(0);
-    // verifies that the button text has changed back to "Add to cart"
-    const addToCartButton = await productPage.getFirstProductAddToCartButton();
-    expect(await addToCartButton.textContent()).toBe(EXPECTED_PRODUCTS_CONSTANTS.ADD_TO_CART_BUTTON_TEXT);
+    await productPage.addToCart();
+    expect(await productPage.getCartItemCount()).toBe(1);
+    await productPage.removeFirstProduct();
+    expect(await productPage.getCartItemCount()).toBe(0);
+    const firstProductContainer = await productPage.getProductContainer();
+    expect(firstProductContainer.locator(productPage.addToCartButton)).toBeVisible();
   });
 
   test("should navigate to the cart page", async ({ page }) => {
     const productPage = new ProductsPage(page);
-    productPage.cartButton.click();
+    await productPage.viewCart();
     await expect(page).toHaveURL(EXPECTED_CART_CONSTANTS.PAGE_URL);
   });
 

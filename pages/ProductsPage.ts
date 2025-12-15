@@ -6,59 +6,56 @@ import { BasePage } from './BasePage';
  * It encapsulates the locators and actions related to the products functionality.
  */
 export class ProductsPage extends BasePage {
+  readonly title: Locator;
   readonly products: Locator;
   readonly cartCount: Locator;
   readonly sortByPriceDropdown: Locator;
+  readonly productName: Locator;
   readonly productPrices: Locator;
+  readonly removeButton: Locator;
+  readonly addToCartButton: Locator;
 
   constructor(page: Page) {
     super(page);
+    this.title = page.getByText('Products');
     this.products = page.locator('.inventory_item');
     this.cartCount = page.locator('.shopping_cart_badge');
-    this.sortByPriceDropdown = page.locator('[data-test="product-sort-container"]');
+    this.sortByPriceDropdown = page.getByTestId('product-sort-container');
+    this.productName = page.locator('.inventory_item_name');
     this.productPrices = page.locator('.inventory_item_price');
+    this.removeButton = page.getByRole('button', { name: 'Remove' });
+    this.addToCartButton = page.getByRole('button', { name: 'Add to cart' });
   }
 
-  async selectProduct(productName: string): Promise<void> {
-    const product = this.products.locator('.inventory_item_name', { hasText: productName });
-    await product.click();
+  async getProductContainer(productName?: string): Promise<Locator> {
+    if (!productName) {
+      return this.products.first();
+    }
+    return this.products.filter({ hasText: productName });
   }
 
-  async addFirstProductToCart(): Promise<void> {
-    const firstProduct = this.products.first();
-    await firstProduct.locator('.btn_primary').click();
+  async selectProduct(productName?: string): Promise<void> {
+    await (await this.getProductContainer(productName)).locator(this.productName).click();
   }
 
-  async addToCart(productName: string): Promise<void> {
-    const productButtonItemLocator = productName.toLowerCase().split(' ').join('-');
-    await this.page.locator(`[data-test="add-to-cart-${productButtonItemLocator}"]`).click();
+  async removeFirstProduct(): Promise<void> {
+    await (await this.getProductContainer()).locator(this.removeButton).click();
   }
 
-  async getAddToCartButton(productName: string): Promise<Locator> {
-    const product = this.products.locator('.inventory_item_name', { hasText: productName });
-    return product.locator('.btn_primary');
-  }
-  async getRemoveButton(productName: string): Promise<Locator> {
-    const product = this.products.locator('.inventory_item_name', { hasText: productName });
-    return product.locator('.btn_secondary');
+
+  /**
+    * Add a product to the cart. If productName is not provided, adds the first  product.
+    * @param productName
+   */
+  async addToCart(productName?: string): Promise<void> {
+    await (await this.getProductContainer(productName)).locator(this.addToCartButton).click();
   }
 
-  async getFirstProductRemoveButton(): Promise<Locator> {
-    const firstProduct = this.products.first();
-    return firstProduct.locator('.btn_secondary');
+  async getFirstProductName(): Promise<string> {
+    return await (await this.getProductContainer()).locator('.inventory_item_name').textContent() || '';
   }
 
-  async getFirstProductAddToCartButton(): Promise<Locator> {
-    const firstProduct = this.products.first();
-    return firstProduct.locator('.btn_primary');
-  }
-
-  async getFirstProductName(): Promise<String> {
-    const firstProduct = this.products.first();
-    const name = await firstProduct.locator('.inventory_item_name').textContent();
-    return name || '';
-  }
-
+  //--- Sorting Methods ---
   async sortProductsByPriceLowToHigh(): Promise<void> {
     await this.sortByPriceDropdown.selectOption('lohi');
   }
@@ -92,7 +89,7 @@ export class ProductsPage extends BasePage {
 
   async sortPricesDescending(): Promise<string[]> {
     const prices = await this.getProductPrices();
-    return prices.sort((a, b) => parseFloat(a) + parseFloat(b));
+    return prices.sort((a, b) => parseFloat(b) - parseFloat(a));
   }
 
   async getFirstProductPrice(): Promise<string> {
