@@ -1,8 +1,9 @@
-import { test, expect } from "@playwright/test";
-import { ProductsPage } from "../pages/ProductsPage";
-import { loginAsStandardUser, loginAsLockedOutUser } from "../utils/testFlows";
-import { EXPECTED_PRODUCTS_CONSTANTS, EXPECTED_LOGIN_CONSTANTS } from "../utils/testConstants";
-import { LoginPage } from "../pages/LoginPage";
+import { test, expect } from '../fixtures/base-test';
+import { loginAsLockedOutUser } from "../utils/testFlows";
+import {
+  EXPECTED_URL_PATHS,
+  EXPECTED_LOGIN_CONSTANTS,
+} from "../utils/testConstants";
 
 /**
  * Smoke Test Suite
@@ -11,56 +12,43 @@ import { LoginPage } from "../pages/LoginPage";
  */
 test.describe("Smoke Test Suite", () => {
 
-  // Test 1: Successful Login and Navigation
-  test('should successfully log in and navigate to the Products page', async ({ page }) => {
+  // Successful Login and Navigation
+  test('should successfully log in and navigate to the Products page', async ({ authenticatedPage }) => {
 
-    // Step 1: Attempt login with valid credentials
-    await loginAsStandardUser(page);
-
-    // Step 2: Assert successful navigation to the products page
-    await expect(page).toHaveURL(EXPECTED_PRODUCTS_CONSTANTS.PAGE_URL);
-
-    // Step 3: Assert key product page elements are visible
-    const productsPage = new ProductsPage(page);
-    await expect(productsPage.title).toBeVisible();
-    await expect(productsPage.cartButton).toBeVisible();
+    await expect(authenticatedPage.title).toBeVisible();
+    await expect(authenticatedPage.cartButton).toBeVisible();
 
   });
 
-  // Test 2: Locked Out User Login Failure
-  test('should display error message for locked out user', async ({ page }) => {
+  // Locked Out User Login Failure
+  test('should display error message for locked out user', async ({ loginPage, page }) => {
 
-    // Step 1: Attempt login with locked-out credentials
-    const loginPage = await loginAsLockedOutUser(page);
+    // Attempt login with locked-out credentials
+    await loginAsLockedOutUser(loginPage);
 
-    // Step 2: Assert navigation remains on the login page
-    await expect(page).toHaveURL(EXPECTED_LOGIN_CONSTANTS.PAGE_URL);
+    // Assert navigation remains on the login page
+    await expect(page).toHaveURL(EXPECTED_URL_PATHS.LOGIN_PAGE);
 
-    // Step 3: Assert the correct error message is displayed
+    // Assert the correct error message is displayed
     await expect(loginPage.errorMessage).toHaveText(EXPECTED_LOGIN_CONSTANTS.ERROR_LOCKED_OUT);
 
   });
 
-  // Test 3: Logout Functionality Check
-  test('should successfully log out and return to the login page', async ({ page }) => {
+  // Logout Functionality Check
+  test('should successfully log out and return to the login page', async ({ authenticatedPage, page, loginPage }) => {
 
-    // Step 1: Log in first (prerequisite)
-    await loginAsStandardUser(page);
-    await expect(page).toHaveURL(EXPECTED_PRODUCTS_CONSTANTS.PAGE_URL);
+    await expect(page).toHaveURL(EXPECTED_URL_PATHS.PRODUCTS_PAGE);
 
-    const productsPage = new ProductsPage(page);
+    // Open the sidebar menu
+    await authenticatedPage.openSidebarMenu();
 
-    // Step 2: Open the sidebar menu
-    await productsPage.sidebarMenuButton.click();
+    // Click the Logout link
+    await authenticatedPage.logoutLink.click();
 
-    // Step 3: Click the Logout link
-    await productsPage.logoutLink.click();
+    // Assert navigation back to the login page
+    await expect(page).toHaveURL(EXPECTED_URL_PATHS.LOGIN_PAGE);
 
-    // Step 4: Assert navigation back to the login page
-    await expect(page).toHaveURL(EXPECTED_LOGIN_CONSTANTS.PAGE_URL);
-
-    // Step 5: Assert that the login username field is empty after logout
-    const loginPage = new LoginPage(page);
+    // Assert that the login username field is empty after logout
     await expect(loginPage.usernameInput).toHaveValue('');
 
   });

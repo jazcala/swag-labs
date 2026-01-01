@@ -1,5 +1,6 @@
 import { Page, Locator } from '@playwright/test';
 import { BasePage } from './BasePage';
+import { EXPECTED_URL_PATHS } from '../utils/testConstants';
 
 /**
  * LoginPage class represents the login page of the Swag Labs application.
@@ -9,6 +10,8 @@ export class LoginPage extends BasePage {
   readonly usernameInput: Locator;
   readonly passwordInput: Locator;
   readonly loginButton: Locator;
+  protected readonly path = EXPECTED_URL_PATHS.LOGIN_PAGE;
+
 
   /**
    * Constructor for the LoginPage.

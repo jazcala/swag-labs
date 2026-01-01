@@ -28,6 +28,7 @@ export interface TestProductShape {
   price: string;
   tax: string;
   description: string;
+  total: string;
 }
 
 // ---CHECKOUT DATA INTERFACE ---
@@ -70,21 +71,24 @@ export const ALL_PRODUCTS: TestProductShape[] = [
     name: 'Sauce Labs Backpack',
     price: '29.99',
     tax: '2.40',
-    description: 'carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection.'
+    description: 'carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection.',
+    total: '32.39'
   },
   {
     id: 0,
     name: 'Sauce Labs Bike Light',
     price: '9.99',
     tax: '0.80', // Assuming an 8% tax calculation based on standard tax setup
-    description: 'A light, easy-to-use bike light for improved night visibility.'
+    description: 'A light, easy-to-use bike light for improved night visibility.',
+    total: '10.79'
   },
   {
     id: 1,
     name: 'Sauce Labs Bolt T-Shirt',
     price: '15.99',
     tax: '1.28', // Assuming an 8% tax calculation
-    description: 'Get your testing superpowers on with the very best T-Shirt.'
+    description: 'Get your testing superpowers on with the very best T-Shirt.',
+    total: '17.27'
   }
 ];
 

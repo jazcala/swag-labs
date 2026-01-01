@@ -1,16 +1,18 @@
 import { Page, Locator } from '@playwright/test';
+import { EXPECTED_URL_PATHS } from '../utils/testConstants';
 
 /**
  * BasePage class serves as a foundational class for all page objects in the Swag Labs application.
  * It encapsulates common properties and methods that can be shared across different pages.
  */
-export class BasePage {
+export abstract class BasePage {
+  protected readonly path = EXPECTED_URL_PATHS.LOGIN_PAGE;
   readonly page: Page;
   readonly siteTitle: Locator;
   readonly errorMessage: Locator;
   //--- Global Cart Elements ---
   readonly cartButton: Locator;
-  readonly cartQuantity: Locator;
+  readonly cartCount: Locator;
   //--- Global Sidebar Elements ---
   readonly sidebarMenuButton: Locator;
   readonly allItemsLink: Locator;
@@ -35,7 +37,7 @@ export class BasePage {
     this.errorMessage = page.getByTestId('error');
     // --- Globar Cart Elements Inicialization ---
     this.cartButton = page.getByTestId('shopping-cart-link');
-    this.cartQuantity = page.getByTestId('shopping-cart-badge');
+    this.cartCount = page.getByTestId('shopping-cart-badge');
     // --- Global Sidebar Elements Inicialization ---
     this.sidebarMenuButton = page.getByRole('button', { name: 'Open Menu' });
     this.allItemsLink = page.getByRole('link', { name: 'All Items' });
@@ -58,6 +60,10 @@ export class BasePage {
    */
   async goto(url: string) {
     await this.page.goto(url);
+  }
+  async navigate() {
+    await this.page.goto(this.path);
+    await this.page.waitForURL(`**${this.path}`);
   }
 
   // --- Reusable Error Message Methods ---
@@ -85,19 +91,6 @@ export class BasePage {
     await this.cartButton.click();
   }
 
-  /**
-   * Gets the number of items in the cart.
-   * @returns A promise that resolves with the number of items in the cart.
-   */
-  async getCartItemCount(): Promise<number> {
-    const isVisible = await this.cartQuantity.isVisible();
-    if (!isVisible) {
-      return 0;
-    }
-    const countText = await this.cartQuantity.textContent();
-    return Number(countText);
-  }
-
   // --- Sidebar Methods ---
 
   /**
@@ -119,5 +112,15 @@ export class BasePage {
    */
   async clickLogout(): Promise<void> {
     await this.logoutLink.click();
+  }
+
+  // -- Footer
+  async clickSocialLink(platform: string) {
+    const links: Record<string, Locator> = {
+      'Twitter': this.twitterLink,
+      'Facebook': this.facebookLink,
+      'LinkedIn': this.linkedinLink
+    };
+    await links[platform].click();
   }
 }

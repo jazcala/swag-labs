@@ -8,7 +8,6 @@ import { BasePage } from './BasePage';
 export class ProductsPage extends BasePage {
   readonly title: Locator;
   readonly products: Locator;
-  readonly cartCount: Locator;
   readonly sortByPriceDropdown: Locator;
   readonly productName: Locator;
   readonly productPrices: Locator;
@@ -19,7 +18,6 @@ export class ProductsPage extends BasePage {
     super(page);
     this.title = page.getByText('Products');
     this.products = page.locator('.inventory_item');
-    this.cartCount = page.locator('.shopping_cart_badge');
     this.sortByPriceDropdown = page.getByTestId('product-sort-container');
     this.productName = page.locator('.inventory_item_name');
     this.productPrices = page.locator('.inventory_item_price');
@@ -27,35 +25,62 @@ export class ProductsPage extends BasePage {
     this.addToCartButton = page.getByRole('button', { name: 'Add to cart' });
   }
 
+  // --- PRIVATE DATA HELPERS (The "Logic") ---
+
+  private async getNumericPrices(): Promise<number[]> {
+    const prices = await this.productPrices.allTextContents();
+    return prices.map(price => parseFloat(price.replace('$', '').trim()));
+  }
+
+  private async getNames(): Promise<string[]> {
+    return await this.productName.allTextContents();
+  }
+
+  // --- ACTIONS ---
+
   async getProductContainer(productName?: string): Promise<Locator> {
-    if (!productName) {
-      return this.products.first();
-    }
-    return this.products.filter({ hasText: productName });
+    return productName ? this.products.filter({ hasText: productName }) : this.products.first();
   }
 
   async selectProduct(productName?: string): Promise<void> {
-    await (await this.getProductContainer(productName)).locator(this.productName).click();
+    const container = await this.getProductContainer(productName);
+    await container.locator(this.productName).click();
   }
+
+  async addToCart(productName?: string): Promise<void> {
+    const container = await this.getProductContainer(productName);
+    await container.locator(this.addToCartButton).click();
+  }
+  // getCartItemCount is in base page
+
+
+
 
   async removeFirstProduct(): Promise<void> {
-    await (await this.getProductContainer()).locator(this.removeButton).click();
+    const container = await this.getProductContainer();
+    await container.locator(this.removeButton).click();
   }
 
-
-  /**
-    * Add a product to the cart. If productName is not provided, adds the first  product.
-    * @param productName
-   */
-  async addToCart(productName?: string): Promise<void> {
-    await (await this.getProductContainer(productName)).locator(this.addToCartButton).click();
-  }
 
   async getFirstProductName(): Promise<string> {
-    return await (await this.getProductContainer()).locator('.inventory_item_name').textContent() || '';
+    const container = await this.getProductContainer();
+    return await container.locator('.inventory_item_name').textContent() || '';
+  }
+
+  /** Checks if the 'Add to Cart' button is visible for a specific product */
+  async isAddToCartVisible(productName?: string): Promise<boolean> {
+    const container = await this.getProductContainer(productName);
+    return await container.locator(this.addToCartButton).isVisible();
+  }
+
+  /** Checks if the 'Remove' button is visible for a specific product */
+  async isRemoveButtonVisible(productName?: string): Promise<boolean> {
+    const container = await this.getProductContainer(productName);
+    return await container.locator(this.removeButton).isVisible();
   }
 
   //--- Sorting Methods ---
+
   async sortProductsByPriceLowToHigh(): Promise<void> {
     await this.sortByPriceDropdown.selectOption('lohi');
   }
@@ -77,24 +102,30 @@ export class ProductsPage extends BasePage {
     return prices.map(price => price.replace('$', '').trim());
   }
 
-  async getProductsNames(): Promise<string[]> {
-    const productNames = await this.products.locator('.inventory_item_name').allTextContents();
-    return productNames;
+  //  --- VALIDATIONS ---
+
+  async isSortedByNameAtoZ(): Promise<boolean> {
+    const actual = await this.getNames();
+    const expected = [...actual].sort();
+    return JSON.stringify(actual) === JSON.stringify(expected);
   }
 
-  async sortPricesAscending(): Promise<string[]> {
-    const prices = await this.getProductPrices();
-    return prices.sort((a, b) => parseFloat(a) - parseFloat(b));
+  async isSortedByNameZtoA(): Promise<boolean> {
+    const actual = await this.getNames();
+    const expected = [...actual].sort((a, b) => b.localeCompare(a));
+    return JSON.stringify(actual) === JSON.stringify(expected);
   }
 
-  async sortPricesDescending(): Promise<string[]> {
-    const prices = await this.getProductPrices();
-    return prices.sort((a, b) => parseFloat(b) - parseFloat(a));
+  async arePricesSortedAscending(): Promise<boolean> {
+    const actual = await this.getNumericPrices();
+    const expected = [...actual].sort((a, b) => a - b);
+    return JSON.stringify(actual) === JSON.stringify(expected);
   }
 
-  async getFirstProductPrice(): Promise<string> {
-    const firstProductPrice = await this.products.first().locator('.inventory_item_price').textContent();
-    return firstProductPrice ? firstProductPrice.replace('$', '').trim() : '';
+  async arePricesSortedDescending(): Promise<boolean> {
+    const actual = await this.getNumericPrices();
+    const expected = [...actual].sort((a, b) => b - a);
+    return JSON.stringify(actual) === JSON.stringify(expected);
   }
 
 }
