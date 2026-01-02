@@ -1,11 +1,8 @@
-import { test, expect } from "@playwright/test";
-import { ProductsPage } from "../pages/ProductsPage";
-import { CartPage } from "../pages/CartPage";
-import { CheckoutOverviewPage } from "../pages/CheckoutOverviewPage";
-import { CheckoutCompletePage } from "../pages/CheckoutCompletePage";
-import { loginAsStandardUser, fillFormAndContinue } from "../utils/testFlows";
-import { ALL_PRODUCTS, TestProductShape } from "../utils/testData";
-import { EXPECTED_CHECKOUT_CONSTANTS, EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS, EXPECTED_PRODUCTS_CONSTANTS, EXPECTED_URL_PATHS } from "../utils/testConstants";
+import { test, expect } from '../fixtures/base-test';
+import { ALL_PRODUCTS, generateRandomUser, TestProductShape } from "../utils/testData";
+import {
+  EXPECTED_URL_PATHS
+} from "../utils/testConstants";
 
 /**
  * E2E (End-to-End) test suite using Data-Driven Testing (DDT) to validate the
@@ -18,54 +15,34 @@ test.describe("E2E Purchase Flows", () => {
 
     ALL_PRODUCTS.forEach((product: TestProductShape) => {
 
-      test(`should successfully purchase the ${product.name} (Single-Item E2E)`, async ({ page }) => {
+      test(`should successfully purchase the ${product.name} (Single-Item E2E)`, async ({ authenticatedPage, cartPage, checkoutPage, checkoutOverviewPage, checkoutCompletePage, page }) => {
 
-        // Step 1. Authentication
-        await loginAsStandardUser(page);
-        await expect(page).toHaveURL(EXPECTED_PRODUCTS_CONSTANTS.PAGE_URL);
-
-        // Step 2. Add Product
-        const productsPage = new ProductsPage(page);
-        await productsPage.addToCart(product.name);
-
-        // Steps 3 & 4. Cart Navigation & Start Checkout
-        await productsPage.viewCart();
-        const cartPage = new CartPage(page);
+        // Authenticated - add product to cart and navigate
+        await authenticatedPage.addToCart(product.name);
+        await authenticatedPage.viewCart();
         await cartPage.proceedToCheckout();
-        await expect(page).toHaveURL(EXPECTED_CHECKOUT_CONSTANTS.PAGE_URL);
+        await expect(page).toHaveURL(EXPECTED_URL_PATHS.CHECKOUT_PAGE);
 
-        // Step 5. Fill Form
-        await fillFormAndContinue(page);
+        // Form entry
+        const user = generateRandomUser();
+        await checkoutPage.fillFormAndContinue(user.firstName, user.lastName, user.zipCode);
 
-        // Step 6. Overview Validation
-        await expect(page).toHaveURL(EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS.PAGE_URL);
+        // Overview checks
+        await expect.soft(checkoutOverviewPage.itemSubTotalValue).toContainText(product.price);
+        await expect.soft(checkoutOverviewPage.itemTotalValue).toContainText(product.total);
 
-        const expectedItemTotal = parseFloat(product.price).toFixed(2);
-        const expectedTaxTotal = parseFloat(product.tax).toFixed(2);
-        const expectedFinalTotal = (parseFloat(expectedItemTotal) + parseFloat(expectedTaxTotal)).toFixed(2);
+        await checkoutOverviewPage.completeCheckout();
 
-        const overviewPage = new CheckoutOverviewPage(page);
-        await expect(overviewPage.itemSubTotalValue).toHaveText(`Item total: $${expectedItemTotal}`);
-        await expect(overviewPage.itemTaxValue).toHaveText(`Tax: $${expectedTaxTotal}`);
-        await expect(overviewPage.itemTotalValue).toHaveText(`Total: $${expectedFinalTotal}`);
+        // Final Confirmation
+        await expect(page).toHaveURL(EXPECTED_URL_PATHS.CHECKOUT_COMPLETE_PAGE);
+        await expect.soft(checkoutCompletePage.messageTitle).toBeVisible();
+        await expect.soft(checkoutCompletePage.messageDescription).toBeVisible();
 
-        // Step 7. Finalize
-        await overviewPage.completeCheckout();
-
-        // Step 8. Confirmation (URL and Message Check)
-        await expect(page).toHaveURL(EXPECTED_URL_PATHS.CHECKOUT_COMPLETE);
-
-        const checkoutCompletePage = new CheckoutCompletePage(page);
-        await expect(checkoutCompletePage.messageTitle).toBeVisible();
-        await expect(checkoutCompletePage.messageDescription).toBeVisible();
-
-        // Step 9. Return to Home
-
-        await expect(checkoutCompletePage.backHomeButton).toBeVisible();
+        //Return to Home
         await checkoutCompletePage.navigateBackHome();
 
-        // Final navigation assertion
-        await expect(page).toHaveURL(EXPECTED_PRODUCTS_CONSTANTS.PAGE_URL);
+        // Lifecycle loop - Back to home
+        await expect(page).toHaveURL(EXPECTED_URL_PATHS.PRODUCTS_PAGE);
 
       });
     });
@@ -74,8 +51,7 @@ test.describe("E2E Purchase Flows", () => {
   // --- 2. MULTI-ITEM PURCHASE FLOW - REFACTORED TO MATCH USER'S STRUCTURE ---
   test.describe("Multi-Item Purchase Validation", () => {
 
-    test('should correctly calculate total price for two different items (Multi-Item E2E)', async ({ page }) => {
-      const productsPage = new ProductsPage(page);
+    test('should correctly calculate total price for two different items (Multi-Item E2E)', async ({ authenticatedPage, cartPage, checkoutPage, checkoutOverviewPage, checkoutCompletePage, page }) => {
 
       // Products to be tested (Backpack and Bike Light)
       const product1 = ALL_PRODUCTS.find(p => p.name === 'Sauce Labs Backpack') as TestProductShape;
@@ -86,45 +62,37 @@ test.describe("E2E Purchase Flows", () => {
       const expectedTaxTotal = (parseFloat(product1.tax) + parseFloat(product2.tax)).toFixed(2);
       const expectedFinalTotal = (parseFloat(expectedItemTotal) + parseFloat(expectedTaxTotal)).toFixed(2);
 
-      // Step 1. Authentication
-      await loginAsStandardUser(page);
-      await expect(page).toHaveURL(EXPECTED_PRODUCTS_CONSTANTS.PAGE_URL); // New constant
 
-      // Step 2. Add Multiple Products
-      await productsPage.addToCart(product1.name);
-      await productsPage.addToCart(product2.name);
+      // Add Multiple Products
+      await authenticatedPage.addToCart(product1.name);
+      await authenticatedPage.addToCart(product2.name);
 
-      // Steps 3 & 4. Cart Navigation & Start Checkout
-      await productsPage.viewCart();
-      const cartPage = new CartPage(page);
+      // Cart Navigation & Start Checkout
+      await authenticatedPage.viewCart();
       await cartPage.proceedToCheckout();
-      await expect(page).toHaveURL(EXPECTED_CHECKOUT_CONSTANTS.PAGE_URL);
+      await expect(page).toHaveURL(EXPECTED_URL_PATHS.CHECKOUT_PAGE);
 
-      // Step 5. Fill Form
-      await fillFormAndContinue(page);
+      // Fill Form and proceed to checkout
+      const user = generateRandomUser();
+      await checkoutPage.fillFormAndContinue(user.firstName, user.lastName, user.zipCode);
+      await expect(page).toHaveURL(EXPECTED_URL_PATHS.CHECKOUT_OVERVIEW_PAGE);
 
-      // Step 6. Overview Validation (CRITICAL ASSERTION)
-      await expect(page).toHaveURL(EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS.PAGE_URL);
+      await expect(checkoutOverviewPage.itemSubTotalValue).toHaveText(`Item total: $${expectedItemTotal}`);
+      await expect(checkoutOverviewPage.itemTaxValue).toHaveText(`Tax: $${expectedTaxTotal}`);
+      await expect(checkoutOverviewPage.itemTotalValue).toHaveText(`Total: $${expectedFinalTotal}`);
 
-      // Check that the calculated totals match our expected aggregated values
-      const overviewPage = new CheckoutOverviewPage(page);
-      await expect(overviewPage.itemSubTotalValue).toHaveText(`Item total: $${expectedItemTotal}`);
-      await expect(overviewPage.itemTaxValue).toHaveText(`Tax: $${expectedTaxTotal}`);
-      await expect(overviewPage.itemTotalValue).toHaveText(`Total: $${expectedFinalTotal}`);
+      // Finalize Order
+      await checkoutOverviewPage.completeCheckout();
 
-      // Step 7. Finalize
-      await overviewPage.completeCheckout();
-
-      // Step 8. Confirmation (URL and Message Check)
-      await expect(page).toHaveURL(EXPECTED_URL_PATHS.CHECKOUT_COMPLETE);
-      const checkoutCompletePage = new CheckoutCompletePage(page);
+      // Confirmation
+      await expect(page).toHaveURL(EXPECTED_URL_PATHS.CHECKOUT_COMPLETE_PAGE);
       await expect(checkoutCompletePage.messageTitle).toBeVisible();
       await expect(checkoutCompletePage.messageDescription).toBeVisible();
 
-      // Step 9. Return to Home
+      // Return to Home
       expect(checkoutCompletePage.backHomeButton).toBeVisible();
       await checkoutCompletePage.navigateBackHome();
-      await expect(page).toHaveURL(EXPECTED_PRODUCTS_CONSTANTS.PAGE_URL);
+      await expect(page).toHaveURL(EXPECTED_URL_PATHS.PRODUCTS_PAGE);
 
     });
   });

@@ -10,9 +10,9 @@ export interface PAGE_URL_PATHS {
   PRODUCTS_PAGE: string;
   PRODUCT_DETAILS_PAGE?: string;
   CART_PAGE: string;
-  CHECKOUT_PAGE_STEP_1: string;
-  CHECKOUT_PAGE_STEP_2: string;
-  CHECKOUT_COMPLETE: string;
+  CHECKOUT_PAGE: string;
+  CHECKOUT_OVERVIEW_PAGE: string;
+  CHECKOUT_COMPLETE_PAGE: string;
 }
 
 export interface SocialLink {
@@ -72,9 +72,9 @@ export const EXPECTED_URL_PATHS: PAGE_URL_PATHS = {
   PRODUCTS_PAGE: '/inventory.html',
   PRODUCT_DETAILS_PAGE: '/inventory-item.html',
   CART_PAGE: '/cart.html',
-  CHECKOUT_PAGE_STEP_1: '/checkout-step-one.html',
-  CHECKOUT_PAGE_STEP_2: '/checkout-step-two.html',
-  CHECKOUT_COMPLETE: '/checkout-complete.html',
+  CHECKOUT_PAGE: '/checkout-step-one.html',
+  CHECKOUT_OVERVIEW_PAGE: '/checkout-step-two.html',
+  CHECKOUT_COMPLETE_PAGE: '/checkout-complete.html',
 };
 
 // --- BASE PAGE EXPECTED CONSTANTS ---
@@ -109,7 +109,7 @@ export const EXPECTED_CART_CONSTANTS: CartPageExpectedConstants = {
 
 // --- CHECKOUT PAGE EXPECTED CONSTANTS ---
 export const EXPECTED_CHECKOUT_CONSTANTS: CheckoutPageExpectedConstants = {
-  PAGE_URL: EXPECTED_URL_PATHS.CHECKOUT_PAGE_STEP_1,
+  PAGE_URL: EXPECTED_URL_PATHS.CHECKOUT_PAGE,
   FIRST_NAME_ERROR: "Error: First Name is required",
   LAST_NAME_ERROR: "Error: Last Name is required",
   ZIP_CODE_ERROR: "Error: Postal Code is required",
@@ -117,7 +117,7 @@ export const EXPECTED_CHECKOUT_CONSTANTS: CheckoutPageExpectedConstants = {
 
 // --- CHECKOUT OVERVIEW PAGE EXPECTED CONSTANTS ---
 export const EXPECTED_CHECKOUT_OVERVIEW_CONSTANTS: CheckoutOverviewPageExpectedConstants = {
-  PAGE_URL: EXPECTED_URL_PATHS.CHECKOUT_PAGE_STEP_2,
+  PAGE_URL: EXPECTED_URL_PATHS.CHECKOUT_OVERVIEW_PAGE,
   SUBTOTAL_LABEL: "Item total: $",
   TAX_LABEL: "Tax: $",
   TOTAL_LABEL: "Total: $"
@@ -130,6 +130,6 @@ export const EXPECTED_SOCIAL_LINKS: SocialLink[] = [
 ];
 
 export const EXPECTED_FOOTER_CONSTANTS: FooterConstants = {
-  EXPECTED_SOCIAL_LINKS: EXPECTED_SOCIAL_LINKS,
+  EXPECTED_SOCIAL_LINKS,
   COPYRIGHT_TEXT: "© 2025 Sauce Labs. All Rights Reserved. Terms of Service | Privacy Policy"
 }

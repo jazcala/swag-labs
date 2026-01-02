@@ -1,25 +1,15 @@
-import { test, expect } from "@playwright/test";
-import { LoginPage } from "../pages/LoginPage";
-import { EXPECTED_BASE_CONSTANTS, EXPECTED_LOGIN_CONSTANTS, EXPECTED_PRODUCTS_CONSTANTS } from "../utils/testConstants";
-import { USERS } from "../utils/testData";
+import { test, expect } from '../fixtures/base-test';
+import { loginAsStandardUser } from '../utils/testFlows';
 
 test.describe("Login Tests", () => {
 
-  let loginPage: LoginPage;
-
-  test.beforeEach(async ({ page }) => {
-    loginPage = new LoginPage(page);
-    await loginPage.goto('/');
+  test("should display Swag Labs as the title", async ({ loginPageReady }) => {
+    await expect(loginPageReady.siteTitle).toBeVisible();
   });
 
-  test("should display Swag Labs as the title", async ({ page }) => {
-    await expect(page).toHaveTitle(EXPECTED_BASE_CONSTANTS.SITE_TITLE);
-  });
-
-  test("should login with valid credentials", async ({ page }) => {
-    const { username, password } = USERS.STANDARD_USER;
-    await loginPage.login(username, password);
-    await expect(page).toHaveURL(EXPECTED_PRODUCTS_CONSTANTS.PAGE_URL);
+  test("should login with valid credentials", async ({ loginPage, productsPage }) => {
+    await loginAsStandardUser(loginPage);
+    await expect(productsPage.title).toBeVisible();
   });
 
 });

@@ -1,75 +1,50 @@
-import { test, expect } from "@playwright/test";
-import { ProductsPage } from "../pages/ProductsPage";
+import { test, expect } from '../fixtures/base-test';
 import { TEST_PRODUCT_DATA, generateRandomUser } from "../utils/testData";
-import { EXPECTED_PRODUCTS_CONSTANTS, EXPECTED_CART_CONSTANTS, EXPECTED_CHECKOUT_CONSTANTS } from "../utils/testConstants";
-import { loginAsStandardUser, setupForCheckoutFormTest } from "../utils/testFlows";
-import { CheckoutPage } from "../pages/CheckoutPage";
-import { CartPage } from "../pages/CartPage";
+import {
+  EXPECTED_URL_PATHS,
+  EXPECTED_CHECKOUT_CONSTANTS
+} from "../utils/testConstants";
 
 test.describe("Negative Tests (Application Flow Errors)", () => {
 
   // --- Cart/Checkout Error Scenarios ---
+  test.skip("should prevent checkout navigation when cart is empty", async ({ authenticatedPage, cartPage, page }) => {
 
-  /**
-  *  It verifies that while the app allows navigation to the empty cart page,
-  * attempting to click the Checkout button redirects the user back to the Products page.
-  * This test is skipped because the current application behavior allows navigation to checkout
-  * even with an empty cart, which may not align with the intended negative test scenario.
-   */
-  test.skip("should prevent checkout navigation when cart is empty", async ({ page }) => {
-
-    // Start with a logged-in user and an empty cart
-    await loginAsStandardUser(page);
-    const productsPage = new ProductsPage(page);
+    test.info().annotations.push({ type: 'issue', description: 'The application navigates to checkout with an empty cart' });
 
     // 1. Go to the Cart Page (it should be empty)
-    await productsPage.viewCart();
-    await expect(page).toHaveURL(EXPECTED_CART_CONSTANTS.PAGE_URL);
+    await authenticatedPage.viewCart();
+    await expect(page).toHaveURL(EXPECTED_URL_PATHS.CART_PAGE);
 
-    const cartPage = new CartPage(page);
     // 2. Attempt to click Checkout button
     await cartPage.proceedToCheckout()
 
     // 3. Verify that the system redirects back to the Products page
-    await expect(page).toHaveURL(EXPECTED_PRODUCTS_CONSTANTS.PAGE_URL);
+    await expect(page).toHaveURL(EXPECTED_URL_PATHS.PRODUCTS_PAGE);
   });
 
   // --- Checkout Form Error Scenarios ---
 
   test.describe("Checkout Form Validation", () => {
 
-    test.beforeEach(async ({ page }) => {
-      // Setup the page by navigating to the Checkout Step One form with an item ready.
-      // We pass the required constants to the helper function.
-      await setupForCheckoutFormTest(
-        page,
-        TEST_PRODUCT_DATA.name,
-      );
-      // We explicitly assert the final navigation step here, as intended.
-      await expect(page).toHaveURL(EXPECTED_CHECKOUT_CONSTANTS.PAGE_URL);
-    });
-
-    test("should display an error when first name is missing", async ({ page }) => {
-      const checkoutPage = new CheckoutPage(page);
+    test("should display an error when first name is missing", async ({ checkoutReadyPage, page }) => {
       const { lastName, zipCode } = generateRandomUser();
-      await checkoutPage.fillFormAndContinue("", lastName, zipCode);
-      await expect(checkoutPage.errorMessage).toHaveText(EXPECTED_CHECKOUT_CONSTANTS.FIRST_NAME_ERROR);
+      await checkoutReadyPage.fillFormAndContinue("", lastName, zipCode);
+      await expect(checkoutReadyPage.errorMessage).toHaveText(EXPECTED_CHECKOUT_CONSTANTS.FIRST_NAME_ERROR);
       await expect(page).toHaveURL(EXPECTED_CHECKOUT_CONSTANTS.PAGE_URL);
     });
 
-    test("should display an error when last name is missing", async ({ page }) => {
-      const checkoutPage = new CheckoutPage(page);
+    test("should display an error when last name is missing", async ({ checkoutReadyPage, page }) => {
       const { firstName, zipCode } = generateRandomUser();
-      await checkoutPage.fillFormAndContinue(firstName, "", zipCode);
-      await expect(checkoutPage.errorMessage).toHaveText(EXPECTED_CHECKOUT_CONSTANTS.LAST_NAME_ERROR);
+      await checkoutReadyPage.fillFormAndContinue(firstName, "", zipCode);
+      await expect(checkoutReadyPage.errorMessage).toHaveText(EXPECTED_CHECKOUT_CONSTANTS.LAST_NAME_ERROR);
       await expect(page).toHaveURL(EXPECTED_CHECKOUT_CONSTANTS.PAGE_URL);
     });
 
-    test("should display an error when postal code is missing", async ({ page }) => {
-      const checkoutPage = new CheckoutPage(page);
+    test("should display an error when postal code is missing", async ({ checkoutReadyPage, page }) => {
       const { firstName, lastName } = generateRandomUser();
-      await checkoutPage.fillFormAndContinue(firstName, lastName, "");
-      await expect(checkoutPage.errorMessage).toHaveText(EXPECTED_CHECKOUT_CONSTANTS.ZIP_CODE_ERROR);
+      await checkoutReadyPage.fillFormAndContinue(firstName, lastName, "");
+      await expect(checkoutReadyPage.errorMessage).toHaveText(EXPECTED_CHECKOUT_CONSTANTS.ZIP_CODE_ERROR);
       await expect(page).toHaveURL(EXPECTED_CHECKOUT_CONSTANTS.PAGE_URL);
     });
 

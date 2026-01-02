@@ -1,35 +1,23 @@
-import { test, expect } from "@playwright/test";
-import { ProductsPage } from "../pages/ProductsPage";
-import { CartPage } from "../pages/CartPage";
+import { test, expect } from '../fixtures//base-test';
 import { loginAsStandardUser } from "../utils/testFlows";
 import { EXPECTED_CART_CONSTANTS, EXPECTED_CHECKOUT_CONSTANTS } from "../utils/testConstants";
 
 test.describe("Cart Page with one product Tests", () => {
 
-  test.beforeEach(async ({ page }) => {
-    await loginAsStandardUser(page);
-    const productsPage = new ProductsPage(page);
-    await productsPage.addToCart();
-    await productsPage.viewCart();
-    await expect(page).toHaveURL(EXPECTED_CART_CONSTANTS.PAGE_URL);
+  test("should have one item in the cart", async ({ cartPageReady }) => {
+    await expect(cartPageReady.cartCount).toHaveText('1');
   });
 
-  test("should have one item in the cart", async ({ page }) => {
-    const cartPage = new CartPage(page);
-    expect(await cartPage.getCartItemCount()).toBe(1);
+  test("should remove item from the cart", async ({ cartPageReady }) => {
+    await expect(cartPageReady.cartCount).toHaveText('1');
+
+    await cartPageReady.removeFirstIemt();
+    await expect(cartPageReady.cartCount).toBeHidden();
   });
 
-  test("should remove item from the cart", async ({ page }) => {
-    const cartPage = new CartPage(page);
-    expect(await cartPage.getCartItemCount()).toBe(1);
-    await cartPage.removeFirstIemt();
-    expect(await cartPage.getCartItemCount()).toBe(0);
-  });
-
-  test("should proceed to checkout after clicking the button", async ({ page }) => {
-    const cartPage = new CartPage(page);
-    await expect(cartPage.checkoutButton).toBeVisible();
-    await cartPage.checkoutButton.click();
+  test("should proceed to checkout after clicking the button", async ({ cartPageReady, page }) => {
+    await expect(cartPageReady.checkoutButton).toBeVisible();
+    await cartPageReady.checkoutButton.click();
     await expect(page).toHaveURL(EXPECTED_CHECKOUT_CONSTANTS.PAGE_URL);
   });
 
