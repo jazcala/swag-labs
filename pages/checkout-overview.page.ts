@@ -1,5 +1,5 @@
 import { Page, Locator } from '@playwright/test';
-import { BasePage } from './BasePage';
+import { BasePage } from './base.page';
 
 /**
  * CheckoutOverviewPage class represents the checkout overview page of the Swag Labs application.
@@ -24,7 +24,7 @@ export class CheckoutOverviewPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.title = page.getByText('Checkout: Overview')
+    this.title = page.getByText('Checkout: Overview');
     this.finishButton = page.getByRole('button', { name: 'Finish' });
     this.cancelButton = page.getByRole('button', { name: 'Cancel' });
     this.paymentInfoTitle = page.getByText('Payment Information:');

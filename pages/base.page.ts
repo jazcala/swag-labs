@@ -1,5 +1,5 @@
 import { Page, Locator } from '@playwright/test';
-import { EXPECTED_URL_PATHS } from '../utils/testConstants';
+import { EXPECTED_URL_PATHS } from '../utils/test-constants';
 
 /**
  * BasePage class serves as a foundational class for all page objects in the Swag Labs application.
@@ -58,10 +58,11 @@ export abstract class BasePage {
    * @param url The URL to navigate to.
    * @returns A promise that resolves when the navigation is complete.
    */
-  async goto(url: string) {
+  async goto(url: string): Promise<void> {
     await this.page.goto(url);
   }
-  async navigate() {
+
+  async navigate(): Promise<void> {
     await this.page.goto(this.path);
     await this.page.waitForURL(`**${this.path}`);
   }
@@ -115,7 +116,7 @@ export abstract class BasePage {
   }
 
   // -- Footer
-  async clickSocialLink(platform: string) {
+  async clickSocialLink(platform: string): Promise<void> {
     const links: Record<string, Locator> = {
       'Twitter': this.twitterLink,
       'Facebook': this.facebookLink,

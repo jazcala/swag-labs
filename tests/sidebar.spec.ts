@@ -1,5 +1,5 @@
 import { test, expect } from '../fixtures/base-test';
-import { EXPECTED_URL_PATHS } from "../utils/testConstants";
+import { EXPECTED_URL_PATHS } from '../utils/test-constants';
 
 test.describe('Global Sidebar Menu Functionality', () => {
 

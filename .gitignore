@@ -1,9 +1,28 @@
-
-# Playwright
+# --- Node.js ---
 node_modules/
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
+npm-debug.log*
+
+# --- Playwright (Crucial) ---
+# These folders get huge quickly with videos and traces
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
 .env
-/tests/example.spec.ts
+
+# --- IDE & OS ---
+.vscode/
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# --- Husky ---
+# We want the hooks, but not the local state
+.husky/_/
+
+# --- Environments & Logs ---
+.env
+*.log

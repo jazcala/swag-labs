@@ -1,17 +1,17 @@
 import { test, expect } from '../fixtures/base-test';
-import { ALL_PRODUCTS, generateRandomUser, TestProductShape } from "../utils/testData";
+import { ALL_PRODUCTS, generateRandomUser, TestProductShape } from '../utils/test-data';
 import {
   EXPECTED_URL_PATHS
-} from "../utils/testConstants";
+} from '../utils/test-constants';
 
 /**
  * E2E (End-to-End) test suite using Data-Driven Testing (DDT) to validate the
  * entire critical purchase path for multiple products.
  */
-test.describe("E2E Purchase Flows", () => {
+test.describe('E2E Purchase Flows', () => {
 
   // --- 1. SINGLE-ITEM PURCHASE FLOW (DDT) ---
-  test.describe("Single-Item Purchase (Data Driven)", () => {
+  test.describe('Single-Item Purchase (Data Driven)', () => {
 
     ALL_PRODUCTS.forEach((product: TestProductShape) => {
 
@@ -49,7 +49,7 @@ test.describe("E2E Purchase Flows", () => {
   });
 
   // --- 2. MULTI-ITEM PURCHASE FLOW - REFACTORED TO MATCH USER'S STRUCTURE ---
-  test.describe("Multi-Item Purchase Validation", () => {
+  test.describe('Multi-Item Purchase Validation', () => {
 
     test('should correctly calculate total price for two different items (Multi-Item E2E)', async ({ authenticatedPage, cartPage, checkoutPage, checkoutOverviewPage, checkoutCompletePage, page }) => {
 
@@ -61,7 +61,6 @@ test.describe("E2E Purchase Flows", () => {
       const expectedItemTotal = (parseFloat(product1.price) + parseFloat(product2.price)).toFixed(2);
       const expectedTaxTotal = (parseFloat(product1.tax) + parseFloat(product2.tax)).toFixed(2);
       const expectedFinalTotal = (parseFloat(expectedItemTotal) + parseFloat(expectedTaxTotal)).toFixed(2);
-
 
       // Add Multiple Products
       await authenticatedPage.addToCart(product1.name);
@@ -90,7 +89,7 @@ test.describe("E2E Purchase Flows", () => {
       await expect(checkoutCompletePage.messageDescription).toBeVisible();
 
       // Return to Home
-      expect(checkoutCompletePage.backHomeButton).toBeVisible();
+      await expect(checkoutCompletePage.backHomeButton).toBeVisible();
       await checkoutCompletePage.navigateBackHome();
       await expect(page).toHaveURL(EXPECTED_URL_PATHS.PRODUCTS_PAGE);
 

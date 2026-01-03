@@ -1,16 +1,16 @@
 import { test, expect } from '../fixtures/base-test';
-import { loginAsLockedOutUser } from "../utils/testFlows";
+import { loginAsLockedOutUser } from '../utils/test-flows';
 import {
   EXPECTED_URL_PATHS,
   EXPECTED_LOGIN_CONSTANTS,
-} from "../utils/testConstants";
+} from '../utils/test-constants';
 
 /**
  * Smoke Test Suite
  * This suite provides quick sanity checks to ensure the application's most critical
  * functions (Login, Navigation, basic access) are operational.
  */
-test.describe("Smoke Test Suite", () => {
+test.describe('Smoke Test Suite @smoke', () => {
 
   // Successful Login and Navigation
   test('should successfully log in and navigate to the Products page', async ({ authenticatedPage }) => {

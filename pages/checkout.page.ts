@@ -1,5 +1,5 @@
 import { Page, Locator } from '@playwright/test';
-import { BasePage } from './BasePage';
+import { BasePage } from './base.page';
 
 /**
  * CheckoutPage class represents the checkout page of the Swag Labs application.

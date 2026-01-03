@@ -1,11 +1,11 @@
-import { Page } from "@playwright/test";
-import { LoginPage } from "../pages/LoginPage";
-import { USERS, generateRandomUser } from "./testData";
-import { ProductsPage } from "../pages/ProductsPage";
-import { CheckoutPage } from "../pages/CheckoutPage";
-import { CartPage } from "../pages/CartPage";
-import { CheckoutOverviewPage } from "../pages/CheckoutOverviewPage";
-import { EXPECTED_LOGIN_CONSTANTS } from "./testConstants";
+// import { Page } from '@playwright/test';
+import { LoginPage } from '../pages/login.page';
+import { USERS, generateRandomUser } from './test-data';
+import { ProductsPage } from '../pages/products.page';
+import { CheckoutPage } from '../pages/checkout.page';
+import { CartPage } from '../pages/cart.page';
+// import { CheckoutOverviewPage } from '../pages/checkout-overview.page';
+// import { EXPECTED_LOGIN_CONSTANTS } from './testConstants';
 
 /**
  * Helper function to perform login with given credentials.
@@ -40,7 +40,7 @@ export async function setupForCheckoutForm(
   productsPage: ProductsPage,
   cartPage: CartPage,
   productName?: string,
-) {
+): Promise<void> {
   await productsPage.addToCart(productName);
   await productsPage.viewCart();
   await cartPage.proceedToCheckout();

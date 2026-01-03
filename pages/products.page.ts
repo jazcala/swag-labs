@@ -1,5 +1,5 @@
 import { Page, Locator } from '@playwright/test';
-import { BasePage } from './BasePage';
+import { BasePage } from './base.page';
 
 /**
  * ProductsPage class represents the products page of the Swag Labs application.
@@ -29,6 +29,7 @@ export class ProductsPage extends BasePage {
 
   private async getNumericPrices(): Promise<number[]> {
     const prices = await this.productPrices.allTextContents();
+
     return prices.map(price => parseFloat(price.replace('$', '').trim()));
   }
 
@@ -53,29 +54,28 @@ export class ProductsPage extends BasePage {
   }
   // getCartItemCount is in base page
 
-
-
-
   async removeFirstProduct(): Promise<void> {
     const container = await this.getProductContainer();
     await container.locator(this.removeButton).click();
   }
 
-
   async getFirstProductName(): Promise<string> {
     const container = await this.getProductContainer();
+
     return await container.locator('.inventory_item_name').textContent() || '';
   }
 
   /** Checks if the 'Add to Cart' button is visible for a specific product */
   async isAddToCartVisible(productName?: string): Promise<boolean> {
     const container = await this.getProductContainer(productName);
+
     return await container.locator(this.addToCartButton).isVisible();
   }
 
   /** Checks if the 'Remove' button is visible for a specific product */
   async isRemoveButtonVisible(productName?: string): Promise<boolean> {
     const container = await this.getProductContainer(productName);
+
     return await container.locator(this.removeButton).isVisible();
   }
 
@@ -99,6 +99,7 @@ export class ProductsPage extends BasePage {
 
   async getProductPrices(): Promise<string[]> {
     const prices = await this.productPrices.allTextContents();
+
     return prices.map(price => price.replace('$', '').trim());
   }
 
@@ -107,24 +108,28 @@ export class ProductsPage extends BasePage {
   async isSortedByNameAtoZ(): Promise<boolean> {
     const actual = await this.getNames();
     const expected = [...actual].sort();
+
     return JSON.stringify(actual) === JSON.stringify(expected);
   }
 
   async isSortedByNameZtoA(): Promise<boolean> {
     const actual = await this.getNames();
     const expected = [...actual].sort((a, b) => b.localeCompare(a));
+
     return JSON.stringify(actual) === JSON.stringify(expected);
   }
 
   async arePricesSortedAscending(): Promise<boolean> {
     const actual = await this.getNumericPrices();
     const expected = [...actual].sort((a, b) => a - b);
+
     return JSON.stringify(actual) === JSON.stringify(expected);
   }
 
   async arePricesSortedDescending(): Promise<boolean> {
     const actual = await this.getNumericPrices();
     const expected = [...actual].sort((a, b) => b - a);
+
     return JSON.stringify(actual) === JSON.stringify(expected);
   }
 

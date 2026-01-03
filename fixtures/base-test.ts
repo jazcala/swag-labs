@@ -1,11 +1,11 @@
 import { test as base } from '@playwright/test';
-import { LoginPage } from '../pages/LoginPage';
-import { ProductsPage } from '../pages/ProductsPage';
-import * as flows from '../utils/testFlows';
-import { CartPage } from '../pages/CartPage';
-import { CheckoutPage } from '../pages/CheckoutPage';
-import { CheckoutOverviewPage } from '../pages/CheckoutOverviewPage';
-import { CheckoutCompletePage } from '../pages/CheckoutCompletePage';
+import { LoginPage } from '../pages/login.page';
+import { ProductsPage } from '../pages/products.page';
+import * as flows from '../utils/test-flows';
+import { CartPage } from '../pages/cart.page';
+import { CheckoutPage } from '../pages/checkout.page';
+import { CheckoutOverviewPage } from '../pages/checkout-overview.page';
+import { CheckoutCompletePage } from '../pages/checkout-complete.page';
 
 type MyPageObjects = {
   loginPage: LoginPage;
@@ -26,10 +26,10 @@ type MyPageObjects = {
 export const test = base.extend<MyPageObjects>({
   loginPage: async ({ page }, use) => { await use(new LoginPage(page)); },
   productsPage: async ({ page }, use) => { await use(new ProductsPage(page)); },
-  cartPage: async ({ page }, use) => { await use(new CartPage(page)) },
-  checkoutPage: async ({ page }, use) => { await use(new CheckoutPage(page)) },
-  checkoutOverviewPage: async ({ page }, use) => { await use(new CheckoutOverviewPage(page)) },
-  checkoutCompletePage: async ({ page }, use) => { await use(new CheckoutCompletePage(page)) },
+  cartPage: async ({ page }, use) => { await use(new CartPage(page)); },
+  checkoutPage: async ({ page }, use) => { await use(new CheckoutPage(page)); },
+  checkoutOverviewPage: async ({ page }, use) => { await use(new CheckoutOverviewPage(page)); },
+  checkoutCompletePage: async ({ page }, use) => { await use(new CheckoutCompletePage(page)); },
   // STATE FIXTURE: Everything is ready for a Product test
   loginPageReady: async ({ page }, use) => {
     const loginPage = new LoginPage(page);
@@ -65,6 +65,6 @@ export const test = base.extend<MyPageObjects>({
     await use(checkoutCompletePage);
   }
 
-})
+});
 
 export { expect } from '@playwright/test';
