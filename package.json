@@ -3,21 +3,37 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test:e2e": "npx playwright test tests/",
-    "test:e2e:all": "npx playwright test tests --project=all-browsers-and-tests",
-    "test:e2e:smoke": "npx playwright tests/ --grep @smoke --project ",
-    "test:e2e:non-smoke": "npx playwright tests --grep-invert @smoke --project",
-    "test:e2e:chrome": "npx playwright test tests --project=chromium",
-    "test:e2e:headless": "npx playwright test tests --headed=false",
-    "test:e2e:ui": "npx playwright test tests --ui"
+    "test": "playwright test",
+    "test:e2e": "playwright test",
+    "test:e2e:smoke": "playwright test --grep @smoke",
+    "test:e2e:ui": "playwright test --ui",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "type-check": "tsc --noEmit",
+    "prepare": "husky"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@commitlint/cli": "^20.3.0",
+    "@commitlint/config-conventional": "^20.3.0",
     "@faker-js/faker": "^9.9.0",
-    "@playwright/test": "^1.53.1",
-    "@types/node": "^24.0.3"
+    "@playwright/test": "^1.57.0",
+    "@types/node": "^24.0.3",
+    "@typescript-eslint/eslint-plugin": "^8.51.0",
+    "@typescript-eslint/parser": "^8.51.0",
+    "eslint": "^9.39.2",
+    "eslint-plugin-check-file": "^3.3.1",
+    "eslint-plugin-playwright": "^2.4.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7"
+  },
+  "lint-staged": {
+    "**/*.ts": [
+      "eslint --fix",
+      "npm run type-check"
+    ]
   }
 }

@@ -1,5 +1,5 @@
 import { Page, Locator } from '@playwright/test';
-import { BasePage } from './BasePage';
+import { BasePage } from './base.page';
 /**
  * CartPage class represents the cart page of the Swag Labs application.
  * It encapsulates the locators and actions related to the cart functionality.
@@ -19,7 +19,7 @@ export class CartPage extends BasePage {
     this.cartQuantityLabel = page.getByText('QTY');
     this.cartDescriptionLabel = page.getByText('Description');
     this.checkoutButton = page.getByRole('button', { name: 'Checkout' });
-    this.continueShoppingButton = page.getByRole('button', { name: "Continue Shopping" });
+    this.continueShoppingButton = page.getByRole('button', { name: 'Continue Shopping' });
     this.removeButton = page.getByRole('button', { name: 'Remove' });
   }
 

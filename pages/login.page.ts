@@ -1,6 +1,6 @@
 import { Page, Locator } from '@playwright/test';
-import { BasePage } from './BasePage';
-import { EXPECTED_URL_PATHS } from '../utils/testConstants';
+import { BasePage } from './base.page';
+import { EXPECTED_URL_PATHS } from '../utils/test-constants';
 
 /**
  * LoginPage class represents the login page of the Swag Labs application.
@@ -11,7 +11,6 @@ export class LoginPage extends BasePage {
   readonly passwordInput: Locator;
   readonly loginButton: Locator;
   protected readonly path = EXPECTED_URL_PATHS.LOGIN_PAGE;
-
 
   /**
    * Constructor for the LoginPage.
@@ -30,7 +29,7 @@ export class LoginPage extends BasePage {
    * @param password The password to enter.
    * @returns A promise that resolves after the login attempt.
    */
-  async login(username: string, password: string) {
+  async login(username: string, password: string): Promise<void> {
     await this.usernameInput.fill(username); // Fill the username input
     await this.passwordInput.fill(password); // Fill the password input
     await this.loginButton.click();         // Click the login button

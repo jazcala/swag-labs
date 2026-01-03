@@ -57,7 +57,7 @@ export const generateRandomUser = (): UserDetails => {
     lastName: faker.person.lastName(),
     zipCode: faker.location.zipCode(),
   };
-}
+};
 
 // --- PRODUCT DATA ---
 
@@ -101,5 +101,5 @@ export const TEST_PRODUCT_DATA: TestProductShape = ALL_PRODUCTS[0];
 
 export const TEST_CHECKOUT_DATA: TestCheckoutData = {
   card: 'SauceCard #31337',
-  shipping: "Free Pony Express Delivery!"
-}
+  shipping: 'Free Pony Express Delivery!'
+};
